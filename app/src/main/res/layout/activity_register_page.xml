@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/registerpage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterPage"
+    android:background="#FFFFFF">
+
+    <ImageView
+        android:id="@+id/ConnectMeLogo_Register"
+        android:layout_width="200dp"
+        android:layout_height="180dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/connectme_logo"
+
+        />
+
+    <TextView
+        android:id="@+id/WelcomeText_Register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Great!"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:layout_below="@+id/ConnectMeLogo_Register"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+
+        />
+
+    <TextView
+        android:id="@+id/WelcomeDescrpit_Register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="We're so excited to get you onboard!"
+        android:textSize="18dp"
+        android:layout_below="@+id/WelcomeText_Register"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="30dp"
+
+        />
+
+    <EditText
+        android:id="@+id/Name_Register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name"
+        android:background="@null"
+        android:textSize="20dp"
+        android:layout_below="@+id/WelcomeDescrpit_Register"
+        android:layout_marginLeft="45dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginRight="45dp"
+
+        />
+
+    <EditText
+        android:id="@+id/UserName_Register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Username"
+        android:background="@null"
+        android:textSize="20dp"
+        android:layout_below="@+id/Name_Register"
+        android:layout_marginLeft="45dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginRight="45dp"
+
+        />
+
+    <EditText
+        android:id="@+id/Phonenum_Register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Phone Number"
+        android:background="@null"
+        android:textSize="20dp"
+        android:layout_below="@+id/UserName_Register"
+        android:layout_marginLeft="45dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginRight="45dp"
+
+        />
+
+    <EditText
+        android:id="@+id/Email_Register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:background="@null"
+        android:textSize="20dp"
+        android:layout_below="@+id/Phonenum_Register"
+        android:layout_marginLeft="45dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginRight="45dp"
+
+        />
+
+    <EditText
+        android:id="@+id/Password_Register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:background="@null"
+        android:textSize="20dp"
+        android:layout_below="@+id/Email_Register"
+        android:layout_marginLeft="45dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginRight="45dp"
+
+        />
+
+    <TextView
+        android:id="@+id/AgreeText_Register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="By clicking Agree and continue below, I agree to"
+        android:layout_below="@+id/Password_Register"
+        android:layout_marginTop="35dp"
+        android:layout_marginLeft="30dp"
+        />
+
+    <TextView
+        android:id="@+id/TermsOfService_Register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/underlined_text"
+        android:layout_below="@+id/AgreeText_Register"
+        android:layout_marginLeft="30dp"
+        android:textColor="#56422A"
+
+        />
+
+    <TextView
+        android:id="@+id/AndText_Register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="and"
+        android:layout_below="@+id/AgreeText_Register"
+        android:layout_toEndOf="@+id/TermsOfService_Register"
+        android:layout_marginLeft="4dp"/>
+
+    <TextView
+        android:id="@+id/PrivacyPolicy_Register"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/underlined_text_privacypolicy"
+        android:layout_below="@+id/AgreeText_Register"
+        android:layout_toEndOf="@+id/AndText_Register"
+        android:layout_marginLeft="4dp"
+        android:textColor="#56422A"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/RegisterButton_Register"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/PrivacyPolicy_Register"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:text="Register"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:background="@drawable/login_button"
+        android:textAllCaps="false"
+        />
+
+    <TextView
+        android:id="@+id/LoginText_Register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Already have an account?"
+        android:textSize="18dp"
+        android:layout_below="@+id/RegisterButton_Register"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="60dp"
+        />
+
+    <TextView
+        android:id="@+id/Login_Register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:textStyle="bold"
+        android:textSize="18dp"
+        android:layout_below="@+id/RegisterButton_Register"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="270dp"
+        android:textColor="#56422A"
+
+        />
+
+</RelativeLayout>

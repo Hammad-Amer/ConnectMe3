@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ConnectMe</string>
+    <string name="underlined_text"><u>Terms of Service</u></string>
+    <string name="underlined_text_privacypolicy"><u>Privacy Policy</u></string>
 </resources>
