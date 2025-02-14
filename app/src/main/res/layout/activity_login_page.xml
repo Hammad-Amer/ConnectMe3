@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    android:id="@+id/Login_page">
 
     <ImageView
         android:id="@+id/ConnectMeLogo_login"
@@ -23,7 +24,7 @@
         android:textSize="25dp"
         android:textStyle="bold"
         android:layout_below="@+id/ConnectMeLogo_login"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:layout_marginLeft="30dp"
 
         />
@@ -35,7 +36,7 @@
         android:text="We're happy to see you. Please Login to\ncontinue."
         android:textSize="18dp"
         android:layout_below="@+id/WelcomeText_login"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="8dp"
         android:layout_marginLeft="30dp"
 
         />
@@ -49,7 +50,7 @@
         android:textSize="20dp"
         android:layout_below="@+id/WelcomeDescrpit_login"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="40dp"
         android:layout_marginRight="40dp"
 
         />
@@ -63,7 +64,7 @@
         android:textSize="20dp"
         android:layout_below="@+id/Username_login"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="40dp"
         android:layout_marginRight="40dp"
 
         />
@@ -79,7 +80,7 @@
         android:textColor="#56422A"
         />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/LoginButton_login"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
@@ -88,9 +89,110 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:text="Login"
-        android:textSize="20dp"
-
+        android:textColor="@color/white"
+        android:textSize="20sp"
         android:background="@drawable/login_button"
+        android:textAllCaps="false"
+        />
+
+    <LinearLayout
+        android:id="@+id/OrContinueWith_login"
+        android:layout_below="@+id/LoginButton_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:gravity="center_vertical"
+
+        >
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/black" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="or continue with"
+            android:textColor="@color/black"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textSize="16dp"
+            />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/black"
+            />
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/GoogleLogo_login"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/google_logo"
+        android:layout_below="@+id/OrContinueWith_login"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="60dp"
+
+
+        />
+
+    <ImageView
+        android:id="@+id/AppleLogo_login"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/apple_logo"
+
+        android:layout_below="@+id/OrContinueWith_login"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+
+        />
+
+    <ImageView
+        android:id="@+id/FacebookLogo_login"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_below="@+id/OrContinueWith_login"
+
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="290dp"
+        android:layout_marginTop="18dp"
+
+        android:src="@drawable/facebook_logo" />
+
+    <TextView
+        android:id="@+id/RegisterUpText_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Don't have an account?"
+        android:textSize="18dp"
+        android:layout_below="@+id/FacebookLogo_login"
+        android:layout_marginTop="18dp"
+        android:layout_marginLeft="70dp"
+        />
+
+    <TextView
+        android:id="@+id/Register_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        android:textStyle="bold"
+        android:textSize="18dp"
+        android:layout_below="@+id/FacebookLogo_login"
+        android:layout_marginTop="18dp"
+        android:layout_marginLeft="260dp"
+        android:textColor="#56422A"
 
         />
 
