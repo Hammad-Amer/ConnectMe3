@@ -9,7 +9,14 @@
     android:background="#FFFFFF"
     >
 
+    <ImageView
+        android:id="@+id/ConnectMeMainLogo"
+        android:layout_width="280dp"
+        android:layout_height="250dp"
+        android:layout_centerInParent="true"
 
+        android:src="@drawable/connectme_mainlogo"
 
+        />
 
 </RelativeLayout>
