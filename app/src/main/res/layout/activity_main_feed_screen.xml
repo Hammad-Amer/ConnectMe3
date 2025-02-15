@@ -87,6 +87,7 @@
 
 
 
+
     </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -101,5 +102,12 @@
         app:itemHorizontalTranslationEnabled="false"
         app:itemIconSize="24dp"
 />
-
+    <ImageView
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/nav_bar_mid"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="35dp"
+        android:layout_alignParentBottom="true"
+        android:elevation="4dp"/>
 </RelativeLayout>
