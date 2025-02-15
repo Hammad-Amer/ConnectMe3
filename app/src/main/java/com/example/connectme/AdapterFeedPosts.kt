@@ -34,8 +34,6 @@ class AdapterFeedPosts(private val feedPostsList: List<ModelFeedPosts>) : Recycl
         val username: TextView = itemView.findViewById(R.id.feed_post_username)
         val username2: TextView = itemView.findViewById(R.id.feed_post_username2)
         val status: TextView = itemView.findViewById(R.id.feed_post_userdescription)
-        val heartButton: ImageButton = itemView.findViewById(R.id.feed_post_heart)
-        val commentButton: ImageButton = itemView.findViewById(R.id.feed_post_comment)
-        val shareButton: ImageButton = itemView.findViewById(R.id.feed_post_share)
+
     }
 }
