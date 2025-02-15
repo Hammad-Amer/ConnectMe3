@@ -13,7 +13,7 @@
         android:theme="@style/Theme.ConnectMe"
         tools:targetApi="31">
         <activity
-            android:name=".ChatScreen_Vanish"
+            android:name=".Voicecall"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,25 +23,28 @@
 
         </activity>
         <activity
-            android:name=".ChatScreen"
+            android:name=".ChatScreen_Vanish"
             android:exported="false">
 
         </activity>
         <activity
-            android:name=".DMs"
+            android:name=".ChatScreen"
             android:exported="false"></activity>
+        <activity
+            android:name=".DMs"
+            android:exported="false" />
         <activity
             android:name=".MainFeedScreen"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".RegisterPage"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".LoginPage"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
     </application>
 
 </manifest>

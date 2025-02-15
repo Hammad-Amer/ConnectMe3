@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/contact_name_callscreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Henry Benjamin"
+        android:textSize="22dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120dp"
+        />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/Main_profile_pic_callscreen"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="230dp"
+
+        android:src="@drawable/pf5"
+        app:shapeAppearanceOverlay="@style/CircleShape"
+        android:layout_centerHorizontal="true"
+
+        />
+
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10:50"
+        android:textSize="20dp"
+        android:textColor="#000000"
+        android:layout_marginBottom="64dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/Main_profile_pic_callscreen"
+        android:layout_marginTop="30dp"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@drawable/videocall_box"
+        android:padding="16dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="25dp"
+        >
+
+        <ImageView
+            android:id="@+id/more_options_callscreen"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/browncircle_more"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            />
+
+        <ImageView
+            android:id="@+id/videocall_callscreen"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/browncircle_videocall"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            />
+
+        <ImageView
+            android:id="@+id/fullvolume_callscreen"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/browncircle_volume"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            />
+
+        <ImageView
+            android:id="@+id/mute_callscreen"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/browncircle_mute"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            />
+
+        <ImageView
+        android:id="@+id/endcall_callscreen"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/call_end"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        />
+
+    </LinearLayout>
+</RelativeLayout>
