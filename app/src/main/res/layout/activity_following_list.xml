@@ -43,6 +43,17 @@
         android:orientation="horizontal"
         android:padding="20dp">
 
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="20dp"
+            android:text="410 Followers"
+            android:gravity="center"
+            />
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -53,7 +64,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="410 Followers"
+                android:text="387 Following"
                 android:textStyle="bold"
                 android:textSize="20dp"
                 android:textColor="@color/brown"
@@ -69,16 +80,6 @@
                 />
         </LinearLayout>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="20dp"
-            android:text="387 Following"
-            android:gravity="center"
-            />
-
-
     </LinearLayout>
 
     <EditText
@@ -92,7 +93,7 @@
         android:padding="12dp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView_followers_list"
+        android:id="@+id/recyclerView_following_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
