@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UserProfile"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/profile_title_userprofile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="My Profile"
+        android:textStyle="bold"
+        android:textSize="28dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
+
+    <ImageView
+        android:id="@+id/edit_profile_userprofile"
+        android:layout_width="30dp"
+        android:layout_height="35dp"
+        android:src="@drawable/edit_profile_pencil"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="30dp" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/Main_profile_pic_userprofile"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="100dp"
+
+        android:src="@drawable/pf1"
+        app:shapeAppearanceOverlay="@style/CircleShape"
+        android:layout_centerHorizontal="true"
+
+        />
+
+    <TextView
+        android:id="@+id/profile_name_userprofile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Olivia Daniel"
+        android:textSize="28dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/Main_profile_pic_userprofile"
+
+        />
+
+    <TextView
+        android:id="@+id/profile_bio_userprofile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profile_name_userprofile"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"
+        android:text="two bananas for a pound, three bananas for a euro"
+        android:textSize="20dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginLeft="27dp"
+        android:layout_marginRight="26dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/profile_stats"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profile_bio_userprofile"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="7"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:text="posts"
+                android:textSize="14dp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textStyle="bold"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="410"
+                android:textSize="20dp"
+                android:textStyle="bold"
+
+                />
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="followers"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+            <TextView
+                android:text="387"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                />
+            <TextView
+                android:text="following"
+                android:textSize="14sp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textStyle="bold"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <GridView
+        android:id="@+id/profile_grid_userprofile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profile_stats"
+        android:layout_marginTop="16dp"
+        android:numColumns="3"
+        android:horizontalSpacing="1dp"
+        android:verticalSpacing="1dp"
+        android:gravity="center"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:layout_alignParentBottom="true"
+        android:background="#FFFFFF"
+        app:menu="@menu/menu"
+
+        app:labelVisibilityMode="labeled"
+        app:itemHorizontalTranslationEnabled="false"
+        app:itemIconSize="24dp"
+        />
+    <ImageView
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/nav_bar_mid"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="35dp"
+        android:layout_alignParentBottom="true"
+        android:elevation="4dp"/>
+
+</RelativeLayout>
