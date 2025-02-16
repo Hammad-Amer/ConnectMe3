@@ -6,89 +6,481 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainFeedScreen"
-    android:background="#FFFFFF"
-    >
+    android:background="#FFFFFF">
 
-
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-    >
+        android:layout_above="@id/bottom_navigation"
+        android:fillViewport="true">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:paddingTop="20dp"
-            android:paddingEnd="20dp"
-            android:paddingLeft="15dp">
-
-            <TextView
-                android:id="@+id/MyCommunity_mainfeed"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="My Community"
-                android:textStyle="bold"
-                android:textSize="30dp"
-            />
-
-
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="A place for all your questions"
-                android:textSize="17dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                />
-
-            <ImageView
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/instagram_dm"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/Story_recyclerview_mainfeed"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
+            android:orientation="vertical">
 
-            android:scrollbars="none"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:paddingTop="20dp"
+                android:paddingEnd="20dp"
+                android:paddingLeft="15dp">
 
-            tools:listitem="@layout/story"
+                <TextView
+                    android:id="@+id/MyCommunity_mainfeed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="My Community"
+                    android:textStyle="bold"
+                    android:textSize="30sp" />
 
-            />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="A place for all your questions"
+                    android:textSize="17sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/feed_posts_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
+                <ImageView
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/instagram_dm" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            android:scrollbars="none"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            <!-- Stories RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/Story_recyclerview_mainfeed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:scrollbars="none"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/story" />
 
-            tools:listitem="@layout/feed_post"
 
-            />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/feed_post01">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#D3D3D3"
+                    android:layout_marginBottom="5dp" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:paddingLeft="15dp">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/user_profile_container01"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/pf4"
+                        app:shapeAppearanceOverlay="@style/CircleShape"
+                        android:layout_centerHorizontal="true"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
+
+                    <TextView
+                        android:id="@+id/feed_post_username01"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hammad"
+                        android:textSize="15dp"
+                        android:textStyle="bold"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="9dp"
+                        app:layout_constraintStart_toEndOf="@+id/user_profile_container01"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/feed_post_options01"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="6dp"
+                        android:background="@drawable/insta_feed_dots"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:minHeight="350dp"
+                    android:maxHeight="350dp"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/userprofile_img1"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:paddingLeft="15dp">
+
+                    <ImageButton
+                        android:id="@+id/feed_post_heart01"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:background="@drawable/feed_heart"
+                        android:layout_marginStart="5dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/feed_post_comment01"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:background="@drawable/comment_feed"
+                        android:layout_marginStart="10dp"
+                        app:layout_constraintStart_toEndOf="@+id/feed_post_heart01"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/feed_post_share01"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:background="@drawable/share_feed"
+                        android:layout_marginStart="10dp"
+                        app:layout_constraintStart_toEndOf="@+id/feed_post_comment01"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/feed_post_save01"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="6dp"
+                        android:background="@drawable/feed_save"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#D3D3D3"
+                    android:layout_marginBottom="5dp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/feed_post_username012"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hammad"
+                        android:textSize="15dp"
+                        android:textStyle="bold"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"/>
+
+                    <TextView
+                        android:id="@+id/feed_post_userdescription"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_toEndOf="@+id/feed_post_username012"
+                        android:text="Here for the vibes"
+                        android:textSize="15dp" />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/feed_post02">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#D3D3D3"
+                    android:layout_marginBottom="5dp" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:paddingLeft="15dp">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/user_profile_container02"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/pf5"
+                        app:shapeAppearanceOverlay="@style/CircleShape"
+                        android:layout_centerHorizontal="true"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
+
+                    <TextView
+                        android:id="@+id/feed_post_username02"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fatiii"
+                        android:textSize="15dp"
+                        android:textStyle="bold"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="9dp"
+                        app:layout_constraintStart_toEndOf="@+id/user_profile_container02"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/feed_post_options02"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="6dp"
+                        android:background="@drawable/insta_feed_dots"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:minHeight="350dp"
+                    android:maxHeight="350dp"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/userprofile_img2"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:paddingLeft="15dp">
+
+                    <ImageButton
+                        android:id="@+id/feed_post_heart02"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:background="@drawable/feed_heart"
+                        android:layout_marginStart="5dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/feed_post_comment02"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:background="@drawable/comment_feed"
+                        android:layout_marginStart="10dp"
+                        app:layout_constraintStart_toEndOf="@+id/feed_post_heart02"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/feed_post_share02"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:background="@drawable/share_feed"
+                        android:layout_marginStart="10dp"
+                        app:layout_constraintStart_toEndOf="@+id/feed_post_comment02"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/feed_post_save02"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="6dp"
+                        android:background="@drawable/feed_save"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#D3D3D3"
+                    android:layout_marginBottom="5dp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/feed_post_username022"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fatii"
+                        android:textSize="15dp"
+                        android:textStyle="bold"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"/>
+
+                    <TextView
+                        android:id="@+id/feed_post_userdescription02"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_toEndOf="@+id/feed_post_username022"
+                        android:text="I don't wanna do this no more "
+                        android:textSize="15dp" />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/feed_post03">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#D3D3D3"
+                    android:layout_marginBottom="5dp" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:paddingLeft="15dp">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/user_profile_container03"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/pf6"
+                        app:shapeAppearanceOverlay="@style/CircleShape"
+                        android:layout_centerHorizontal="true"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
+
+                    <TextView
+                        android:id="@+id/feed_post_username03"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Leo"
+                        android:textSize="15dp"
+                        android:textStyle="bold"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="9dp"
+                        app:layout_constraintStart_toEndOf="@+id/user_profile_container03"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/feed_post_options03"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="6dp"
+                        android:background="@drawable/insta_feed_dots"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:minHeight="350dp"
+                    android:maxHeight="350dp"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/userprofile_img3"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:paddingLeft="15dp">
+
+                    <ImageButton
+                        android:id="@+id/feed_post_heart03"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:background="@drawable/feed_heart"
+                        android:layout_marginStart="5dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/feed_post_comment03"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:background="@drawable/comment_feed"
+                        android:layout_marginStart="10dp"
+                        app:layout_constraintStart_toEndOf="@+id/feed_post_heart03"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/feed_post_share03"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:background="@drawable/share_feed"
+                        android:layout_marginStart="10dp"
+                        app:layout_constraintStart_toEndOf="@+id/feed_post_comment03"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/feed_post_save03"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="6dp"
+                        android:background="@drawable/feed_save"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#D3D3D3"
+                    android:layout_marginBottom="5dp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/feed_post_username032"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Leo"
+                        android:textSize="15dp"
+                        android:textStyle="bold"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"/>
+
+                    <TextView
+                        android:id="@+id/feed_post_userdescription03"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_toEndOf="@+id/feed_post_username032"
+                        android:text="Why did i do this to myself"
+                        android:textSize="15dp" />
+
+                </RelativeLayout>
+            </LinearLayout>
 
 
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-
-    </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -97,11 +489,11 @@
         android:layout_alignParentBottom="true"
         android:background="#FFFFFF"
         app:menu="@menu/menu"
-
         app:labelVisibilityMode="labeled"
         app:itemHorizontalTranslationEnabled="false"
-        app:itemIconSize="24dp"
-/>
+        app:itemIconSize="24dp" />
+
+
     <ImageView
         android:layout_width="45dp"
         android:layout_height="45dp"
@@ -109,5 +501,5 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="35dp"
         android:layout_alignParentBottom="true"
-        android:elevation="4dp"/>
+        android:elevation="4dp" />
 </RelativeLayout>

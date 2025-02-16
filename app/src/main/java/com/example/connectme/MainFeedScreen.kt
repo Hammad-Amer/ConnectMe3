@@ -15,7 +15,7 @@ class MainFeedScreen : AppCompatActivity() {
         setContentView(R.layout.activity_main_feed_screen)
 
         val storyList = mutableListOf<ModelStory>()
-        storyList.add(ModelStory(userStory, R.drawable.pf1)) // User's own story
+        storyList.add(ModelStory(userStory, R.drawable.pf1))
         storyList.add(ModelStory(otherStory, R.drawable.pf2))
         storyList.add(ModelStory(otherStory, R.drawable.pf3))
         storyList.add(ModelStory(otherStory, R.drawable.pf4))
@@ -27,12 +27,8 @@ class MainFeedScreen : AppCompatActivity() {
         rv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rv.adapter = AdapterStory(storyList)
 
-        val feedPostsList = mutableListOf<ModelFeedPosts>()
-        feedPostsList.add(ModelFeedPosts("Raja Muhammad Adil Nadeem", R.drawable.pf6, R.drawable.adil1,"G-13"))
-        feedPostsList.add(ModelFeedPosts("Affan Ahmed Swati", R.drawable.pf7, R.drawable.feed_post2,"From Palestine btw"))
 
-        val rv2 = findViewById<RecyclerView>(R.id.feed_posts_recyclerview)
-        rv2.layoutManager = LinearLayoutManager(this)
-        rv2.adapter = AdapterFeedPosts(feedPostsList)
+
+
     }
 }
