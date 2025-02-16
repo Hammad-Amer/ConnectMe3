@@ -155,11 +155,12 @@
         android:layout_below="@id/profile_stats"
         android:layout_marginTop="16dp"
         android:numColumns="3"
-        android:horizontalSpacing="1dp"
-        android:verticalSpacing="1dp"
+        android:horizontalSpacing="2dp"
+        android:verticalSpacing="2dp"
         android:gravity="center"
         android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"/>
+        android:layout_marginRight="15dp"
+        android:background="#2F2F2F"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -180,6 +181,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="35dp"
         android:layout_alignParentBottom="true"
-        android:elevation="4dp"/>
+        android:elevation="4dp"
+        />
 
 </RelativeLayout>
