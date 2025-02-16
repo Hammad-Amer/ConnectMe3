@@ -13,7 +13,7 @@
         android:theme="@style/Theme.ConnectMe"
         tools:targetApi="31">
         <activity
-            android:name=".EditProfile"
+            android:name=".Search"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,13 +22,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FollowingList"
+            android:name=".EditProfile"
             android:exported="false">
 
         </activity>
         <activity
-            android:name=".FollowersList"
+            android:name=".FollowingList"
             android:exported="false"></activity>
+        <activity
+            android:name=".FollowersList"
+            android:exported="false" />
         <activity
             android:name=".UserProfile"
             android:exported="false" />
