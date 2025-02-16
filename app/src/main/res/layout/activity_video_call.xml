@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="#DDDDDD">
+    android:background="#DDDDDD"
+    android:id="@+id/activity_video_call">
 
     <TextView
         android:id="@+id/contact_name_videocallscreen"

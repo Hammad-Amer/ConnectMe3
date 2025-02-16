@@ -1,6 +1,8 @@
 package com.example.connectme
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -33,6 +35,12 @@ class FollowersList : AppCompatActivity() {
         val rv4 = findViewById<RecyclerView>(R.id.recyclerView_followers_list)
         rv4.layoutManager = LinearLayoutManager(this)
         rv4.adapter = AdapterFollowing(FollowersList)
+
+        val gotouserprofile = findViewById<ImageView>(R.id.go_backto_profile)
+        gotouserprofile.setOnClickListener {
+            val intent = Intent(this, UserProfile::class.java)
+            startActivity(intent)
+        }
 
 
     }

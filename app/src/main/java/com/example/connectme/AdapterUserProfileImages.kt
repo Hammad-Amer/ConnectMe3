@@ -17,10 +17,10 @@ class AdapterUserProfileImages(private val context: Context, private val imageId
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val imageView: ImageView = convertView as? ImageView ?: ImageView(context).apply {
 
-            layoutParams = ViewGroup.LayoutParams(300, 330)
+            layoutParams = ViewGroup.LayoutParams(430, 430)
             scaleType = ImageView.ScaleType.FIT_CENTER
             adjustViewBounds = true
-            setPadding(2, 2, 2, 2)
+            setPadding(1, 1, 1, 1)
         }
 
         imageView.setImageResource(imageIds[position])

@@ -1,10 +1,12 @@
 package com.example.connectme
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class Search : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,5 +25,34 @@ class Search : AppCompatActivity() {
         val rv = findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerView_search_history)
         rv.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         rv.adapter = AdapterSearch(searchList)
+
+
+
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    startActivity(Intent(this, MainFeedScreen::class.java))
+                    true
+                }
+                R.id.nav_search ->
+                    true
+
+                R.id.nav_add -> {
+                    startActivity(Intent(this, NewPost::class.java))
+                    true
+                }
+                R.id.nav_profile -> {
+                    startActivity(Intent(this, UserProfile::class.java))
+                    true
+                }
+                R.id.nav_contacts -> {
+                    startActivity(Intent(this, Contacts::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
     }
 }

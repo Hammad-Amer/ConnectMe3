@@ -5,6 +5,7 @@
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/activity_new_post_screen"
     tools:context=".NewPost_screen"
     android:orientation="vertical"
     android:padding="15dp"
@@ -14,11 +15,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="25dp"
         >
 
         <ImageView
-            android:id="@+id/back_icon"
+            android:id="@+id/back_icon_cross"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/cross"
@@ -82,6 +83,7 @@
         android:layout_height="match_parent"
         >
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/share_button"
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_height="50dp"

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/activity_dms"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -13,11 +13,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-
+        android:layout_marginTop="20dp"
         android:paddingTop="30dp"
         android:paddingLeft="20dp">
 
         <ImageView
+            android:id="@+id/go_backfromdms"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/back"

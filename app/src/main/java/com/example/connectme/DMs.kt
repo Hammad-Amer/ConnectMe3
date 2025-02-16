@@ -1,6 +1,12 @@
 package com.example.connectme
 
+import RecyclerItemClickListener
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -24,6 +30,27 @@ class DMs : AppCompatActivity() {
         val rv3 = findViewById<RecyclerView>(R.id.recyclerView_Dms)
         rv3.layoutManager = LinearLayoutManager(this)
         rv3.adapter =AdapterDMs(DMsList)
+
+        val backtomainfeed= findViewById<ImageView>(R.id.go_backfromdms)
+        backtomainfeed.setOnClickListener {
+            val intent = Intent(this,MainFeedScreen::class.java)
+            startActivity(intent)
+        }
+
+        rv3.addOnItemTouchListener(
+            RecyclerItemClickListener(this, rv3,
+                object : RecyclerItemClickListener.OnItemClickListener {
+                    override fun onItemClick(position: Int) {
+                        Log.d("RecyclerClick", "Clicked position: $position")
+                        startActivity(Intent(this@DMs, ChatScreen::class.java))
+                    }
+
+                    override fun onLongItemClick(position: Int) {
+
+                    }
+                })
+        )
+
 
     }
 }

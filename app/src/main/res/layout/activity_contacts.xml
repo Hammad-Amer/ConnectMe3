@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/acitvity_contacts"
     android:background="@color/white"
    >
 
@@ -12,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-
+        android:layout_marginTop="20dp"
         android:paddingTop="30dp"
         android:paddingLeft="20dp">
 
@@ -316,6 +317,7 @@
         app:labelVisibilityMode="labeled"
         app:itemHorizontalTranslationEnabled="false"
         app:itemIconSize="24dp"
+
 
         />
     <ImageView

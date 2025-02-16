@@ -1,6 +1,9 @@
 package com.example.connectme
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -11,10 +14,20 @@ class LoginPage : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_login_page)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.Login_page)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+
+        val loginButton = findViewById<Button>(R.id.LoginButton_login)
+        loginButton.setOnClickListener {
+            val intent = Intent(this, MainFeedScreen::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+
+        val registerText = findViewById<TextView>(R.id.Register_login)
+        registerText.setOnClickListener {
+            val intent = Intent(this, RegisterPage::class.java)
+            startActivity(intent)
         }
     }
 }

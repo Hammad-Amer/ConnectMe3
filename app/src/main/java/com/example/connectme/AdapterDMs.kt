@@ -18,6 +18,8 @@ class AdapterDMs(private val dmsList: List<ModelDMs>) : RecyclerView.Adapter<Ada
         val dm = dmsList[position]
         holder.name.text = dm.name
         holder.profileImage.setImageResource(dm.image)
+
+
     }
 
     override fun getItemCount(): Int = dmsList.size

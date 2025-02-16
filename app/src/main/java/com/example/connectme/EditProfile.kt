@@ -1,6 +1,8 @@
 package com.example.connectme
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -12,5 +14,10 @@ class EditProfile : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_edit_profile)
 
+        val gobacktouser = findViewById<TextView>(R.id.done_edit_profile)
+        gobacktouser.setOnClickListener {
+            val intent = Intent(this, UserProfile::class.java)
+            startActivity(intent)
+        }
     }
 }

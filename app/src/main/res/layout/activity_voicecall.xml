@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:id="@+id/activity_voicescreen">
 
     <TextView
         android:id="@+id/contact_name_callscreen"

@@ -1,9 +1,13 @@
 package com.example.connectme
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainFeedScreen : AppCompatActivity() {
 
@@ -27,7 +31,39 @@ class MainFeedScreen : AppCompatActivity() {
         rv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rv.adapter = AdapterStory(storyList)
 
+        val gotodms = findViewById<ImageView>(R.id.connectme_dm)
+        gotodms.setOnClickListener {
+            val intent = Intent(this, DMs::class.java)
+            startActivity(intent)
+        }
 
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+
+                R.id.nav_home ->
+                    true
+
+                R.id.nav_search -> {
+                    startActivity(Intent(this, Search::class.java))
+                    true
+                }
+                R.id.nav_add -> {
+                    startActivity(Intent(this, NewPost::class.java))
+                    true
+                }
+                R.id.nav_profile -> {
+                    startActivity(Intent(this, UserProfile::class.java))
+                    true
+                }
+                R.id.nav_contacts -> {
+                    startActivity(Intent(this, Contacts::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
 
 
     }

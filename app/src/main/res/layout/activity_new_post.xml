@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".NewPost"
+    android:id="@+id/activity_new_post"
     android:orientation="vertical"
-    android:layout_marginLeft="15dp"
-    android:layout_marginRight="15dp">
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:background="@color/white">
 
 
 
@@ -18,11 +19,12 @@
         android:orientation="horizontal"
         android:padding="10dp"
         android:background="@color/white"
-        android:layout_marginTop="15dp">
+        android:layout_marginTop="25dp">
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:id="@+id/cross_go_backto_feed"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:src="@drawable/cross"/>
 
         <TextView
@@ -35,13 +37,14 @@
             />
 
         <TextView
+            android:id="@+id/next_newpost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Next"
-            android:textSize="20dp"
+            android:textSize="23dp"
             android:textStyle="bold"
             android:textColor="@color/brown"
-            android:layout_marginLeft="100dp"
+            android:layout_marginLeft="90dp"
             />
 
 
@@ -85,6 +88,7 @@
             android:src="@drawable/album"/>
 
         <ImageView
+            android:id="@+id/camera"
             android:layout_width="20dp"
             android:layout_height="30dp"
             android:layout_marginLeft="20dp"

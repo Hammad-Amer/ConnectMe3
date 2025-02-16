@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/acitivity_chat_screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ChatScreen"
@@ -12,7 +12,7 @@
         android:id="@+id/BackButton_chat"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
         android:layout_marginLeft="25dp"
         android:src="@drawable/back"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +25,7 @@
         android:text="Henry Benjamin"
         android:textStyle="bold"
         android:textSize="26dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="34dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/BackButton_chat"
         android:layout_marginStart="16dp"/>
@@ -36,7 +36,7 @@
         android:layout_height="24dp"
         android:src="@drawable/phone"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="40dp"
         android:layout_marginStart="50dp"
         app:layout_constraintStart_toEndOf="@id/Username_chat"
         />
@@ -47,7 +47,7 @@
         android:layout_height="34dp"
         android:src="@drawable/video_call"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="34dp"
         android:layout_marginStart="30dp"
         app:layout_constraintStart_toEndOf="@id/Call_chat"
         />
@@ -118,7 +118,7 @@
             android:paddingStart="16dp"/>
 
         <ImageView
-            android:id="@+id/btnSend"
+            android:id="@+id/btnSend_vanish"
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:src="@drawable/send_msg_2"
