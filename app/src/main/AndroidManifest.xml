@@ -13,7 +13,7 @@
         android:theme="@style/Theme.ConnectMe"
         tools:targetApi="31">
         <activity
-            android:name=".NewPost_screen"
+            android:name=".Contacts"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,13 +22,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TakePicture"
-            android:exported="true">
+            android:name=".NewPost_screen"
+            android:exported="false">
 
         </activity>
         <activity
-            android:name=".NewPost"
+            android:name=".TakePicture"
             android:exported="true"></activity>
+        <activity
+            android:name=".NewPost"
+            android:exported="true" />
         <activity
             android:name=".Search"
             android:exported="true" />
