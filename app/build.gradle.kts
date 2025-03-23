@@ -31,6 +31,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
+    buildFeatures{
+        viewBinding = true
+    }
+
     kotlinOptions {
         jvmTarget = "11"
     }
@@ -55,7 +60,7 @@ dependencies {
     androidTestImplementation(libs.test.runner)
     androidTestImplementation(libs.test.rules)
 
-
+    implementation(libs.full.sdk)
 
 
 

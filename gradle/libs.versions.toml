@@ -2,6 +2,7 @@
 agp = "8.8.0"
 butterknife = "10.2.1"
 cardview = "1.0.0"
+fullSdk = "4.5.1"
 kotlin = "1.9.24"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -24,6 +25,7 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 butterknife = { module = "com.jakewharton:butterknife", version.ref = "butterknife" }
 butterknife-compiler = { module = "com.jakewharton:butterknife-compiler", version.ref = "butterknife" }
 cardview = { module = "andoroidx.cardview:cardview", version.ref = "cardview" }
+full-sdk = { module = "io.agora.rtc:full-sdk", version.ref = "fullSdk" }
 google-material = { module = "com.google.material:material", version.ref = "materialVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
