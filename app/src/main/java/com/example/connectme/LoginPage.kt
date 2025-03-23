@@ -3,31 +3,65 @@ package com.example.connectme
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.google.firebase.auth.FirebaseAuth
 
 class LoginPage : AppCompatActivity() {
+    private lateinit var email: EditText
+    private lateinit var password: EditText
+    private lateinit var loginButton: Button
+    private lateinit var forgotPassword: TextView
+    private lateinit var registerText: TextView
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_login_page)
 
+        auth = FirebaseAuth.getInstance()
+        email = findViewById(R.id.Username_login)
+        password = findViewById(R.id.Password_login)
+        loginButton = findViewById(R.id.LoginButton_login)
+        forgotPassword = findViewById(R.id.ForgotPassword_login)
+        registerText = findViewById(R.id.Register_login)
 
-        val loginButton = findViewById<Button>(R.id.LoginButton_login)
-        loginButton.setOnClickListener {
-            val intent = Intent(this, MainFeedScreen::class.java)
-            startActivity(intent)
+        loginButton.setOnClickListener { loginUser() }
+        registerText.setOnClickListener {
+            startActivity(Intent(this, RegisterPage::class.java))
+        }
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // If the user is already logged in, go directly to the MainFeedScreen
+        if (auth.currentUser != null) {
+            startActivity(Intent(this, MainFeedScreen::class.java))
             finish()
         }
+    }
 
+    private fun loginUser() {
+        val userEmail = email.text.toString().trim()
+        val userPassword = password.text.toString().trim()
 
-        val registerText = findViewById<TextView>(R.id.Register_login)
-        registerText.setOnClickListener {
-            val intent = Intent(this, RegisterPage::class.java)
-            startActivity(intent)
+        if (userEmail.isEmpty() || userPassword.isEmpty()) {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+            return
         }
+
+        auth.signInWithEmailAndPassword(userEmail, userPassword)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, MainFeedScreen::class.java))
+                    finish()
+                } else {
+                    Toast.makeText(this, "Login failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
     }
 }

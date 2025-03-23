@@ -31,6 +31,14 @@ class MainFeedScreen : AppCompatActivity() {
         rv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rv.adapter = AdapterStory(storyList)
 
+        val feedPostsList = mutableListOf<ModelFeedPosts>()
+        feedPostsList.add(ModelFeedPosts("Raja Muhammad Adil Nadeem", R.drawable.pf6, R.drawable.adil1,"G-13"))
+        feedPostsList.add(ModelFeedPosts("Affan Ahmed Swati", R.drawable.pf7, R.drawable.feed_post2,"From Palestine btw"))
+
+        val rv2 = findViewById<RecyclerView>(R.id.feed_posts_recyclerview)
+        rv2.layoutManager = LinearLayoutManager(this)
+        rv2.adapter = AdapterFeedPosts(feedPostsList)
+
         val gotodms = findViewById<ImageView>(R.id.connectme_dm)
         gotodms.setOnClickListener {
             val intent = Intent(this, DMs::class.java)
