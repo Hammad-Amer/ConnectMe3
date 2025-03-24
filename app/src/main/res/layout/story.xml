@@ -8,13 +8,13 @@
 
 
     <com.google.android.material.imageview.ShapeableImageView
-    android:id="@+id/story_profile"
-    android:layout_width="75dp"
-    android:layout_height="75dp"
-    android:layout_gravity="center"
-    android:scaleType="centerCrop"
-    android:adjustViewBounds="true"
-    app:strokeColor="#56422A"
-    app:strokeWidth="2dp"
-    app:shapeAppearanceOverlay="@style/CircleShape"/>
+        android:id="@+id/story_profile"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        app:strokeColor="#56422A"
+        app:strokeWidth="2dp"
+        app:shapeAppearanceOverlay="@style/CircleShape"/>
 </FrameLayout>

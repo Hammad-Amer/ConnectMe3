@@ -3,17 +3,24 @@
   <component name="deploymentTargetSelector">
     <selectionStates>
       <SelectionState runConfigName="app">
-        <option name="selectionMode" value="DIALOG" />
+        <option name="selectionMode" value="DROPDOWN" />
+        <DropdownSelection timestamp="2025-03-24T06:55:47.896969100Z">
+          <Target type="DEFAULT_BOOT">
+            <handle>
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\hamma\.android\avd\Copy_of_Copy_of_Copy_2_of_Pixel_3_XL_API_35.avd" />
+            </handle>
+          </Target>
+        </DropdownSelection>
         <DialogSelection>
           <targets>
             <Target type="DEFAULT_BOOT">
               <handle>
-                <DeviceId pluginId="PhysicalDevice" identifier="serial=075862522G008454" />
+                <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\hamma\.android\avd\Copy_2_of_Pixel_3_XL_API_35.avd" />
               </handle>
             </Target>
             <Target type="DEFAULT_BOOT">
               <handle>
-                <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\hamma\.android\avd\Copy_2_of_Pixel_3_XL_API_35.avd" />
+                <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\hamma\.android\avd\Copy_of_Copy_of_Copy_2_of_Pixel_3_XL_API_35.avd" />
               </handle>
             </Target>
           </targets>

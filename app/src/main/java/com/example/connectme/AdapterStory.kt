@@ -6,7 +6,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 
-class AdapterStory(private val storyList: List<ModelStory>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterStory(
+    private val storyList: List<ModelStory>,
+    private val onStoryClick: (ModelStory) -> Unit,
+    private val onStoryLongClick: (ModelStory) -> Unit
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         const val USER_STORY = 1
@@ -32,20 +36,31 @@ class AdapterStory(private val storyList: List<ModelStory>) : RecyclerView.Adapt
 
         if (holder is UserStoryViewHolder) {
             holder.imageView.setImageResource(storyItem.image)
+
+            holder.itemView.setOnClickListener {
+                onStoryClick(storyItem)
+            }
+
+            holder.itemView.setOnLongClickListener {
+                onStoryLongClick(storyItem)
+                true
+            }
         } else if (holder is OtherStoryViewHolder) {
             holder.imageView.setImageResource(storyItem.image)
         }
     }
+
     override fun getItemCount(): Int {
         return storyList.size
     }
 
     class UserStoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imageView: ImageView = itemView.findViewById(R.id.user_ownstory_profile_image) // Correct ID
+        val imageView: ImageView = itemView.findViewById(R.id.user_ownstory_profile_image)
     }
 
     class OtherStoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView: ImageView = itemView.findViewById(R.id.story_profile)
     }
 }
+
 

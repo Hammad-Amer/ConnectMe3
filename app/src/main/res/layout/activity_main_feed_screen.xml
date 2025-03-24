@@ -99,7 +99,7 @@
         app:labelVisibilityMode="labeled"
         app:itemHorizontalTranslationEnabled="false"
         app:itemIconSize="24dp"
-/>
+        />
 
 
     <ImageView

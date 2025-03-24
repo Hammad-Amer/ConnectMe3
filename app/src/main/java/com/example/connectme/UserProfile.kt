@@ -2,6 +2,7 @@ package com.example.connectme
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.GridView
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 
 class UserProfile : AppCompatActivity() {
 
@@ -48,7 +50,12 @@ class UserProfile : AppCompatActivity() {
             startActivity(intent)
         }
 
-
+        val logoutButton = findViewById<Button>(R.id.logout)
+        logoutButton.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            startActivity(Intent(this, LoginPage::class.java))
+            finish()
+        }
 
 
 
