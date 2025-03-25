@@ -9,56 +9,50 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AdapterChatMessage(
-    private val messages: List<ModelChat>,
-    private val onMessageLongClick: (ModelChat, Int) -> Unit
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterChatMessageVanish(private val messages: List<ModelChat>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val VIEW_TYPE_SENT = 1
     private val VIEW_TYPE_RECEIVED = 2
     private val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
 
     override fun getItemViewType(position: Int): Int {
+        // Determine the view type based on whether the message is sent by the current user
         return if (messages[position].senderId == currentUserId) VIEW_TYPE_SENT else VIEW_TYPE_RECEIVED
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return if (viewType == VIEW_TYPE_SENT) {
-            val view = inflater.inflate(R.layout.chat_message_sent, parent, false)
-            SentMessageViewHolder(view)
+            // Inflate vanish mode layout for sent messages
+            val view = inflater.inflate(R.layout.chat_message_sent_vanish, parent, false)
+            SentMessageVanishViewHolder(view)
         } else {
-            val view = inflater.inflate(R.layout.chat_message_recieved, parent, false)
-            ReceivedMessageViewHolder(view)
+            // Inflate vanish mode layout for received messages
+            val view = inflater.inflate(R.layout.chat_message_recieved_vanish, parent, false)
+            ReceivedMessageVanishViewHolder(view)
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val message = messages[position]
-        if (holder is SentMessageViewHolder) {
+        if (holder is SentMessageVanishViewHolder) {
             holder.bind(message)
-        } else if (holder is ReceivedMessageViewHolder) {
+        } else if (holder is ReceivedMessageVanishViewHolder) {
             holder.bind(message)
-        }
-
-        // Long-click for editing/deleting (only if the user is the sender)
-        holder.itemView.setOnLongClickListener {
-            onMessageLongClick(message, position)
-            true
         }
     }
 
-    override fun getItemCount() = messages.size
+    override fun getItemCount(): Int = messages.size
 
-    inner class SentMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val messageText: TextView = itemView.findViewById(R.id.text_message_sent)
-        private val timestampText: TextView = itemView.findViewById(R.id.text_timestamp_sent)
+    // ViewHolder for vanish mode sent messages
+    inner class SentMessageVanishViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val messageText: TextView = itemView.findViewById(R.id.text_message_sent_vanish)
+        private val timestampText: TextView = itemView.findViewById(R.id.text_timestamp_sent_vanish)
 
         fun bind(message: ModelChat) {
             messageText.text = message.message
@@ -66,16 +60,17 @@ class AdapterChatMessage(
         }
     }
 
-    inner class ReceivedMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val profileImage: ShapeableImageView = itemView.findViewById(R.id.user_profile_received)
-        private val messageText: TextView = itemView.findViewById(R.id.text_message_received)
-        private val timestampText: TextView = itemView.findViewById(R.id.text_timestamp_received)
+    // ViewHolder for vanish mode received messages
+    inner class ReceivedMessageVanishViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val profileImage: ImageView = itemView.findViewById(R.id.user_profile_received_vanish)
+        private val messageText: TextView = itemView.findViewById(R.id.text_message_received_vanish)
+        private val timestampText: TextView = itemView.findViewById(R.id.text_timestamp_received_vanish)
 
         fun bind(message: ModelChat) {
             messageText.text = message.message
             timestampText.text = formatTimestamp(message.timestamp)
 
-            // Fetch the sender's profile image
+            // Load the sender's profile image from Firebase
             val senderId = message.senderId
             val userRef = FirebaseDatabase.getInstance().reference.child("Users").child(senderId)
             userRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -87,17 +82,17 @@ class AdapterChatMessage(
                             val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                             profileImage.setImageBitmap(bitmap)
                         } catch (e: Exception) {
-                            Log.e("AdapterChatMessage", "Error decoding profile image", e)
+                            Log.e("AdapterVanish", "Error decoding profile image", e)
                             profileImage.setImageResource(R.drawable.pf1)
                         }
                     } else {
-                        // No profile image found; set placeholder
+                        // If no profile image, set a placeholder
                         profileImage.setImageResource(R.drawable.pf1)
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    Log.e("AdapterChatMessage", "Failed to load user data", error.toException())
+                    Log.e("AdapterVanish", "Failed to load user data", error.toException())
                     profileImage.setImageResource(R.drawable.pf1)
                 }
             })

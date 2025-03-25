@@ -36,9 +36,10 @@
         android:layout_height="24dp"
         android:src="@drawable/phone"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="40dp"
         android:layout_marginStart="50dp"
-        app:layout_constraintStart_toEndOf="@id/Username_chat"
+        android:layout_marginEnd="65dp"
         />
 
     <ImageView
@@ -49,7 +50,8 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="34dp"
         android:layout_marginStart="30dp"
-        app:layout_constraintStart_toEndOf="@id/Call_chat"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="15dp"
         />
 
     <com.google.android.material.imageview.ShapeableImageView

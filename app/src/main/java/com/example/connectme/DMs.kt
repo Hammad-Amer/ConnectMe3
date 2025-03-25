@@ -4,53 +4,92 @@ import RecyclerItemClickListener
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 
 class DMs : AppCompatActivity() {
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: AdapterDMs
+    private val dmList = mutableListOf<ModelDMs>()
+    private val database = FirebaseDatabase.getInstance().reference.child("Chats")
+    private val auth = FirebaseAuth.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_dms)
 
-        val DMsList = mutableListOf<ModelDMs>()
-        DMsList.add(ModelDMs(R.drawable.pf6, "Raja Muhammad Adil Nadeem"))
-        DMsList.add(ModelDMs(R.drawable.pf7, "Affan Ahmed Swati"))
-        DMsList.add(ModelDMs(R.drawable.pf3, "Shayaan Khalid"))
-        DMsList.add(ModelDMs(R.drawable.pf4, "Fatima"))
-        DMsList.add(ModelDMs(R.drawable.pf5, "Arjit Singh"))
+        recyclerView = findViewById(R.id.recyclerView_Dms)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        adapter = AdapterDMs(dmList)
+        recyclerView.adapter = adapter
 
-        val rv3 = findViewById<RecyclerView>(R.id.recyclerView_Dms)
-        rv3.layoutManager = LinearLayoutManager(this)
-        rv3.adapter =AdapterDMs(DMsList)
+        fetchChatUsers()
 
-        val backtomainfeed= findViewById<ImageView>(R.id.go_backfromdms)
-        backtomainfeed.setOnClickListener {
-            val intent = Intent(this,MainFeedScreen::class.java)
-            startActivity(intent)
-        }
-
-        rv3.addOnItemTouchListener(
-            RecyclerItemClickListener(this, rv3,
+        recyclerView.addOnItemTouchListener(
+            RecyclerItemClickListener(this, recyclerView,
                 object : RecyclerItemClickListener.OnItemClickListener {
                     override fun onItemClick(position: Int) {
-                        Log.d("RecyclerClick", "Clicked position: $position")
-                        startActivity(Intent(this@DMs, ChatScreen::class.java))
+                        val selectedUserId = dmList[position].userId // Get selected user's ID
+                        val intent = Intent(this@DMs, ChatScreen::class.java)
+                        intent.putExtra("USER_ID", selectedUserId) // Pass user ID dynamically
+                        startActivity(intent)
                     }
 
-                    override fun onLongItemClick(position: Int) {
-
-                    }
+                    override fun onLongItemClick(position: Int) {}
                 })
         )
+    }
 
+    private fun fetchChatUsers() {
+        val currentUserId = auth.currentUser?.uid ?: return
+        val uniqueUsers = HashSet<String>()
 
+        database.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (chatSnapshot in snapshot.children) {
+                    val chatId = chatSnapshot.key.toString()
+                    if (chatId.contains(currentUserId)) {
+                        for (message in chatSnapshot.child("messages").children) {
+                            val senderId = message.child("senderId").value.toString()
+                            val receiverId = message.child("receiverId").value.toString()
+
+                            if (senderId == currentUserId) {
+                                uniqueUsers.add(receiverId)
+                            } else if (receiverId == currentUserId) {
+                                uniqueUsers.add(senderId)
+                            }
+                        }
+                    }
+                }
+                fetchUsernames(uniqueUsers)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("Firebase", "Failed to load chats", error.toException())
+            }
+        })
+    }
+
+    private fun fetchUsernames(userIds: Set<String>) {
+        val usersRef = FirebaseDatabase.getInstance().reference.child("Users")
+        dmList.clear()
+
+        for (userId in userIds) {
+            usersRef.child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val username = snapshot.child("username").value?.toString() ?: "Unknown"
+                    val profileImageString = snapshot.child("profileImage").value?.toString() ?: ""
+                    dmList.add(ModelDMs(R.drawable.pf6, username, userId, profileImageString))
+                    adapter.notifyDataSetChanged()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("Firebase", "Failed to load usernames", error.toException())
+                }
+            })
+        }
     }
 }
