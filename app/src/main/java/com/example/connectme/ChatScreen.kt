@@ -1,7 +1,14 @@
 package com.example.connectme
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
+import android.database.ContentObserver
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.os.*
+import android.provider.MediaStore
+import android.util.Base64
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
@@ -10,28 +17,31 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
-import android.graphics.BitmapFactory
-import android.util.Base64
 import com.google.android.material.imageview.ShapeableImageView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import com.google.firebase.database.*
 
 class ChatScreen : AppCompatActivity() {
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var etMessage: EditText
     private lateinit var sendButton: ImageView
     private lateinit var adapter: AdapterChatMessage
     private val chatMessages = mutableListOf<ModelChat>()
     private lateinit var usernameTextView: TextView
+    private lateinit var onlineStatusTextView: TextView  // <--- For showing receiver's status
+
     private val currentUser = FirebaseAuth.getInstance().currentUser
     private val database = FirebaseDatabase.getInstance().reference
+
     private val receiverUserId: String by lazy {
         intent.getStringExtra("USER_ID") ?: "" // Get the receiver ID from intent
     }
 
+    private var screenshotObserver: ContentObserver? = null
     private lateinit var chatRoomId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,21 +52,34 @@ class ChatScreen : AppCompatActivity() {
         etMessage = findViewById(R.id.etMessage)
         sendButton = findViewById(R.id.btnSend_vanish)
         usernameTextView = findViewById(R.id.Username_chat)
+
+        // This TextView must exist in your layout (e.g., below usernameTextView).
+        // For example: <TextView android:id="@+id/onlineStatusTextView" ... />
+        onlineStatusTextView = findViewById(R.id.onlineStatusTextView)
+
         adapter = AdapterChatMessage(chatMessages) { message, position ->
             handleMessageLongPress(message, position)
         }
+
         recyclerView.layoutManager = LinearLayoutManager(this).apply {
             stackFromEnd = true
         }
         recyclerView.adapter = adapter
 
+        // Generate the chat room ID
         chatRoomId = generateChatRoomId(currentUser?.uid ?: "", receiverUserId)
 
+        // Load receiver's username & profile image
         fetchReceiverUsername()
-        sendButton.setOnClickListener {
-            sendMessage()
-        }
 
+        // Listen for messages in this chat
+        listenForMessages()
+
+        // Screenshot observer (already in your code)
+        registerScreenshotObserver()
+
+        // Button listeners
+        sendButton.setOnClickListener { sendMessage() }
         sendButton.setOnLongClickListener {
             val intent = Intent(this, ChatScreen_Vanish::class.java)
             intent.putExtra("USER_ID", receiverUserId) // pass receiver's user ID dynamically
@@ -66,11 +89,137 @@ class ChatScreen : AppCompatActivity() {
 
         val backButtonchat = findViewById<ImageView>(R.id.BackButton_chat)
         backButtonchat.setOnClickListener {
-            val intent = Intent(this, DMs::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, DMs::class.java))
         }
 
-        listenForMessages()
+        // Listen for the receiver's online/offline status
+        listenForReceiverStatus()
+    }
+
+    // MARK THE CURRENT USER AS ONLINE WHEN THE ACTIVITY STARTS
+    override fun onStart() {
+        super.onStart()
+        setUserOnlineStatus(currentUser?.uid)
+    }
+
+    // FUNCTION TO SET THE CURRENT USER'S STATUS TO "ONLINE"
+    private fun setUserOnlineStatus(userId: String?) {
+        if (userId == null) return
+        val userStatusDatabaseRef = FirebaseDatabase.getInstance().getReference("status/$userId")
+
+        // Write the online status
+        userStatusDatabaseRef.setValue("online")
+
+        // When the client disconnects, update to "offline"
+        userStatusDatabaseRef.onDisconnect().setValue("offline")
+    }
+
+    // FUNCTION TO LISTEN FOR THE RECEIVER'S STATUS
+    private fun listenForReceiverStatus() {
+        val receiverStatusRef = FirebaseDatabase.getInstance().getReference("status/$receiverUserId")
+        receiverStatusRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val status = snapshot.getValue(String::class.java)
+                if (status == "online") {
+                    onlineStatusTextView.text = "Online"
+                } else {
+                    onlineStatusTextView.text = "Offline"
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                // Handle error if needed
+            }
+        })
+    }
+
+    // SCREENSHOT OBSERVER (UNCHANGED)
+    private fun registerScreenshotObserver() {
+        screenshotObserver = object : ContentObserver(Handler(Looper.getMainLooper())) {
+            override fun onChange(selfChange: Boolean, uri: Uri?) {
+                super.onChange(selfChange, uri)
+                Log.d("ContentObserver", "onChange triggered, URI: $uri")
+                // Query MediaStore for the latest image in the Screenshots folder.
+                val projection = arrayOf(MediaStore.Images.Media.DATA)
+                val selection = "${MediaStore.Images.Media.DATA} LIKE ?"
+                val selectionArgs = arrayOf("%/Pictures/Screenshots/%")
+                contentResolver.query(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    projection,
+                    selection,
+                    selectionArgs,
+                    "${MediaStore.Images.Media.DATE_ADDED} DESC"
+                )?.use { cursor ->
+                    if (cursor.moveToFirst()) {
+                        val filePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
+                        // Immediately send notification once a new screenshot is detected.
+                        if (filePath.contains("Screenshots", ignoreCase = true) ||
+                            filePath.contains("Screenshot", ignoreCase = true)) {
+                            Log.d("ContentObserver", "Screenshot detected: $filePath")
+                            sendScreenshotNotification()
+                        }
+                    }
+                }
+            }
+        }
+        contentResolver.registerContentObserver(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            true,
+            screenshotObserver!!
+        )
+        Log.d("ContentObserver", "Screenshot observer registered")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Unregister the observer when the activity is destroyed.
+        screenshotObserver?.let { contentResolver.unregisterContentObserver(it) }
+    }
+
+    // NOTIFY OTHER USER OF A SCREENSHOT
+    private fun sendScreenshotNotification() {
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        // Fetch sender's username
+        FirebaseDatabase.getInstance().getReference("Users")
+            .child(currentUserId)
+            .child("username")
+            .get().addOnSuccessListener { senderSnapshot ->
+                val senderUsername = senderSnapshot.getValue(String::class.java) ?: "Someone"
+                // Then, fetch the receiver's token
+                FirebaseDatabase.getInstance().getReference("Users")
+                    .child(receiverUserId)
+                    .child("token")
+                    .get().addOnSuccessListener { tokenSnapshot ->
+                        val receiverToken = tokenSnapshot.getValue(String::class.java)
+                        if (!receiverToken.isNullOrEmpty()) {
+                            // Build notification payload for screenshot detection
+                            val notification = Notification(
+                                message = NotificationData(
+                                    token = receiverToken,
+                                    data = hashMapOf(
+                                        "title" to senderUsername,
+                                        "body" to "$senderUsername took a screenshot of your chat!"
+                                    )
+                                )
+                            )
+                            Log.d("FCM", "Sending screenshot notification to token: $receiverToken")
+                            NotificationApi.create().sendNotification(notification)
+                                .enqueue(object : Callback<Notification> {
+                                    override fun onResponse(call: Call<Notification>, response: Response<Notification>) {
+                                        Log.d("FCM", "Screenshot notification sent successfully")
+                                    }
+                                    override fun onFailure(call: Call<Notification>, t: Throwable) {
+                                        Log.e("FCM", "Error sending screenshot notification: ${t.message}")
+                                    }
+                                })
+                        } else {
+                            Log.e("FCM", "Receiver token is null or empty")
+                        }
+                    }.addOnFailureListener { e ->
+                        Log.e("FCM", "Failed to fetch receiver token", e)
+                    }
+            }.addOnFailureListener { e ->
+                Log.e("FCM", "Failed to fetch sender username", e)
+            }
     }
 
     private fun handleMessageLongPress(message: ModelChat, position: Int) {
@@ -83,11 +232,9 @@ class ChatScreen : AppCompatActivity() {
         val currentTime = System.currentTimeMillis()
         val allowedDuration = 5 * 60 * 1000  // 5 minutes in milliseconds
         if (currentTime - message.timestamp > allowedDuration) {
-            // Outside allowed window
             Toast.makeText(this, "Editing or deleting is allowed only within 5 minutes.", Toast.LENGTH_SHORT).show()
             return
         }
-        // Show a dialog with options "Edit" and "Delete"
         val options = arrayOf("Edit", "Delete")
         androidx.appcompat.app.AlertDialog.Builder(this)
             .setTitle("Edit or Delete Message")
@@ -110,13 +257,13 @@ class ChatScreen : AppCompatActivity() {
             .setPositiveButton("Save") { dialog, _ ->
                 val newText = editText.text.toString().trim()
                 if (newText.isNotEmpty()) {
-                    // Update the message in the database
-                    val messageRef = database.child("Chats").child(chatRoomId).child("messages").child(message.key ?: "")
-                    // Create a new map with updated message text
+                    val messageRef = database.child("Chats")
+                        .child(chatRoomId)
+                        .child("messages")
+                        .child(message.key ?: "")
                     val updates = mapOf<String, Any>("message" to newText)
                     messageRef.updateChildren(updates)
                         .addOnSuccessListener {
-                            // Also update locally
                             message.message = newText
                             adapter.notifyItemChanged(position)
                         }
@@ -131,12 +278,14 @@ class ChatScreen : AppCompatActivity() {
     }
 
     private fun deleteMessage(message: ModelChat) {
-        if (message.key != null) {
-            val messageRef = database.child("Chats").child(chatRoomId).child("messages").child(message.key!!)
+        message.key?.let {
+            val messageRef = database.child("Chats")
+                .child(chatRoomId)
+                .child("messages")
+                .child(it)
             messageRef.removeValue()
                 .addOnSuccessListener {
                     Toast.makeText(this, "Message deleted", Toast.LENGTH_SHORT).show()
-                    // Optionally, remove it from your local list and update adapter
                     val index = chatMessages.indexOfFirst { it.key == message.key }
                     if (index != -1) {
                         chatMessages.removeAt(index)
@@ -149,82 +298,6 @@ class ChatScreen : AppCompatActivity() {
         }
     }
 
-    private fun sendNotificationToReceiver(messageText: String) {
-        // Retrieve the receiver's token from the Users node
-        FirebaseDatabase.getInstance().getReference("Users")
-            .child(receiverUserId)
-            .child("token")
-            .get().addOnSuccessListener { snapshot ->
-                val receiverToken = snapshot.getValue(String::class.java)
-                if (!receiverToken.isNullOrEmpty()) {
-                    // Build the notification payload
-                    val notification = Notification(
-                        message = NotificationData(
-                            token = receiverToken,
-                            hashMapOf(
-                                "title" to "New Message",
-                                "body" to messageText
-                            )
-                        )
-                    )
-
-                    Log.d("FCM1", "Notification sent to receiver $receiverToken")
-                    // Send the notification via your API
-                    NotificationApi.create().sendNotification(notification)
-                        .enqueue(object : Callback<Notification> {
-                            override fun onResponse(
-                                call: Call<Notification>,
-                                response: Response<Notification>
-                            ) {
-                                Log.d("FCM", "Notification sent to receiver")
-                            }
-
-                            override fun onFailure(call: Call<Notification>, t: Throwable) {
-                                Log.e("FCM", "Error sending notification: ${t.message}")
-                            }
-                        })
-                } else {
-                    Log.e("FCM", "Receiver token is null or empty")
-                }
-            }.addOnFailureListener { e ->
-                Log.e("FCM", "Failed to fetch receiver token", e)
-            }
-    }
-
-
-
-    private fun fetchReceiverUsername() {
-        val usersRef = database.child("Users").child(receiverUserId)
-        val profileImageView = findViewById<ShapeableImageView>(R.id.Main_profile_pic_chat)
-
-        usersRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                // 1. Get username
-                val username = snapshot.child("username").value?.toString() ?: "Unknown"
-                usernameTextView.text = username
-
-                // 2. Get profileImage (Base64-encoded string)
-                val base64String = snapshot.child("profileImage").value?.toString()
-
-                // 3. Decode Base64 and set image
-                if (!base64String.isNullOrEmpty()) {
-                    try {
-                        val imageBytes = Base64.decode(base64String, Base64.DEFAULT)
-                        val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                        profileImageView.setImageBitmap(bitmap)
-                    } catch (e: Exception) {
-                        Log.e("ChatScreen", "Error decoding profile image", e)
-                    }
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("Firebase", "Failed to load user data", error.toException())
-            }
-        })
-    }
-
-
     private fun sendMessage() {
         val messageText = etMessage.text.toString().trim()
         if (messageText.isNotEmpty() && currentUser != null) {
@@ -234,7 +307,6 @@ class ChatScreen : AppCompatActivity() {
                 senderId = currentUser.uid,
                 receiverId = receiverUserId
             )
-
             database.child("Chats").child(chatRoomId).child("messages").push()
                 .setValue(chatMessage)
                 .addOnSuccessListener {
@@ -250,9 +322,76 @@ class ChatScreen : AppCompatActivity() {
         }
     }
 
+    private fun sendNotificationToReceiver(messageText: String) {
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        FirebaseDatabase.getInstance().getReference("Users")
+            .child(currentUserId)
+            .child("username")
+            .get().addOnSuccessListener { senderSnapshot ->
+                val senderUsername = senderSnapshot.getValue(String::class.java) ?: "Someone"
+                FirebaseDatabase.getInstance().getReference("Users")
+                    .child(receiverUserId)
+                    .child("token")
+                    .get().addOnSuccessListener { tokenSnapshot ->
+                        val receiverToken = tokenSnapshot.getValue(String::class.java)
+                        if (!receiverToken.isNullOrEmpty()) {
+                            val notification = Notification(
+                                message = NotificationData(
+                                    token = receiverToken,
+                                    data = hashMapOf(
+                                        "title" to senderUsername,
+                                        "body" to messageText
+                                    )
+                                )
+                            )
+                            Log.d("FCM1", "Sending notification to receiver with token: $receiverToken")
+                            NotificationApi.create().sendNotification(notification)
+                                .enqueue(object : Callback<Notification> {
+                                    override fun onResponse(call: Call<Notification>, response: Response<Notification>) {
+                                        Log.d("FCM", "Notification sent to receiver")
+                                    }
+                                    override fun onFailure(call: Call<Notification>, t: Throwable) {
+                                        Log.e("FCM", "Error sending notification: ${t.message}")
+                                    }
+                                })
+                        } else {
+                            Log.e("FCM", "Receiver token is null or empty")
+                        }
+                    }.addOnFailureListener { e ->
+                        Log.e("FCM", "Failed to fetch receiver token", e)
+                    }
+            }.addOnFailureListener { e ->
+                Log.e("FCM", "Failed to fetch sender username", e)
+            }
+    }
+
+    private fun fetchReceiverUsername() {
+        val usersRef = database.child("Users").child(receiverUserId)
+        val profileImageView = findViewById<ShapeableImageView>(R.id.Main_profile_pic_chat)
+        usersRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val username = snapshot.child("username").value?.toString() ?: "Unknown"
+                usernameTextView.text = username
+
+                val base64String = snapshot.child("profileImage").value?.toString()
+                if (!base64String.isNullOrEmpty()) {
+                    try {
+                        val imageBytes = Base64.decode(base64String, Base64.DEFAULT)
+                        val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                        profileImageView.setImageBitmap(bitmap)
+                    } catch (e: Exception) {
+                        Log.e("ChatScreen", "Error decoding profile image", e)
+                    }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("Firebase", "Failed to load user data", error.toException())
+            }
+        })
+    }
+
     private fun listenForMessages() {
         val chatRef = database.child("Chats").child(chatRoomId).child("messages")
-
         chatRef.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val message = snapshot.getValue(ModelChat::class.java)
@@ -263,7 +402,6 @@ class ChatScreen : AppCompatActivity() {
                     recyclerView.scrollToPosition(chatMessages.size - 1)
                 }
             }
-
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
             override fun onChildRemoved(snapshot: DataSnapshot) {}
             override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}

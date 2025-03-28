@@ -19,6 +19,7 @@ import android.os.StrictMode
 import android.widget.Toast
 import com.example.connectme.FirebaseConsts.USER_PATH
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.messaging.FirebaseMessaging
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,6 +37,7 @@ class MainActivity : AppCompatActivity() {
             if (auth.currentUser != null) {
 
                 startActivity(Intent(this, MainFeedScreen::class.java)) // Redirect to main feed
+                setToken()
             } else {
                 startActivity(Intent(this, LoginPage::class.java)) // Go to login
             }
@@ -45,5 +47,14 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun setToken() {
+        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+            if (it.isNotEmpty()) {
+                FirebaseDatabase.getInstance().getReference(USER_PATH)
+                    .child(FirebaseAuth.getInstance().uid!!)
+                    .updateChildren(mapOf("token" to it))
+            }
+        }
+    }
 
 }
