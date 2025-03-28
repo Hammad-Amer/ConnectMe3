@@ -1,46 +1,69 @@
 package com.example.connectme
 
-import android.content.Intent
 import android.os.Bundle
+import android.util.Base64
+import android.util.Log
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 
 class FollowingList : AppCompatActivity() {
+
+    private lateinit var adapter: AdapterFollowing
+    private val followingList = mutableListOf<ModelFollowing>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_following_list)
 
-        val FollowingList = mutableListOf<ModelFollowing>()
-        FollowingList.add(ModelFollowing(R.drawable.pf2, "Raja Muhammad Adil Nadeem"))
-        FollowingList.add(ModelFollowing(R.drawable.pf3, "Affan Ahmed Swati"))
-        FollowingList.add(ModelFollowing(R.drawable.pf4, "Shayaan Khalid"))
-        FollowingList.add(ModelFollowing(R.drawable.pf5, "Fatima"))
-        FollowingList.add(ModelFollowing(R.drawable.pf6, "Arjit Singh"))
-        FollowingList.add(ModelFollowing(R.drawable.pf7, "Atif Aslam"))
-        FollowingList.add(ModelFollowing(R.drawable.pf8, "Ali Zafar"))
-        FollowingList.add(ModelFollowing(R.drawable.pf9, "Bilal Saeed"))
-        FollowingList.add(ModelFollowing(R.drawable.pf10, "Maryam Nawaz"))
-        FollowingList.add(ModelFollowing(R.drawable.pf11, "Altaf Hussain"))
-        FollowingList.add(ModelFollowing(R.drawable.pf12, "Imran Khan"))
-        FollowingList.add(ModelFollowing(R.drawable.pf13, "Leanardo Dicaprio"))
-        FollowingList.add(ModelFollowing(R.drawable.pf14, "Weeknd"))
-        FollowingList.add(ModelFollowing(R.drawable.pf16, "Kendrick Lamar"))
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView_following_list)
+        adapter = AdapterFollowing(followingList)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
 
-        val rv4 = findViewById<RecyclerView>(R.id.recyclerView_following_list)
-        rv4.layoutManager = LinearLayoutManager(this)
-        rv4.adapter = AdapterFollowing(FollowingList)
-
-        val gotouserprofile = findViewById<ImageView>(R.id.go_backto_profile)
-        gotouserprofile.setOnClickListener {
-            val intent = Intent(this, UserProfile::class.java)
-            startActivity(intent)
+        findViewById<ImageView>(R.id.go_backto_profile).setOnClickListener {
+            finish()
         }
 
+        fetchFollowing()
+    }
+
+    private fun fetchFollowing() {
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val followingRef = FirebaseDatabase.getInstance().getReference("Users").child(currentUserId).child("following")
+
+        followingRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                followingList.clear()
+                val databaseRef = FirebaseDatabase.getInstance().getReference("Users")
+
+                for (following in snapshot.children) {
+                    val followingId = following.key ?: continue  // Get the user ID
+
+                    databaseRef.child(followingId).addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(userSnapshot: DataSnapshot) {
+                            val username = userSnapshot.child("fullName").getValue(String::class.java) ?: "Unknown"
+                            val profileBase64 = userSnapshot.child("profileImage").getValue(String::class.java) ?: ""
+
+                            followingList.add(ModelFollowing(profileBase64, username))
+                            adapter.notifyDataSetChanged()
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            Log.e("FollowingList", "Error fetching user data: ${error.message}")
+                        }
+                    })
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("FollowingList", "Error fetching following: ${error.message}")
+            }
+        })
     }
 }

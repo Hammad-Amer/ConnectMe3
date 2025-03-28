@@ -48,8 +48,6 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginTop="100dp"
-
-        android:src="@drawable/pf1"
         app:shapeAppearanceOverlay="@style/CircleShape"
         android:layout_centerHorizontal="true"
 
@@ -59,7 +57,7 @@
         android:id="@+id/profile_name_userprofile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Olivia Daniel"
+        android:text="Username"
         android:textSize="28dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
@@ -74,7 +72,7 @@
         android:layout_below="@id/profile_name_userprofile"
         android:layout_centerHorizontal="true"
         android:textStyle="bold"
-        android:text="two bananas for a pound, three bananas for a euro"
+        android:text="bio ig"
         android:textSize="20dp"
         android:layout_marginTop="7dp"
         android:layout_marginLeft="27dp"
@@ -101,9 +99,10 @@
             >
 
             <TextView
+                android:id="@+id/post_count"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="7"
+                android:text="0"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 />
@@ -125,9 +124,10 @@
             android:orientation="vertical"
             android:gravity="center">
             <TextView
+                android:id="@+id/follower_count"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="410"
+                android:text="0"
                 android:textSize="20dp"
                 android:textStyle="bold"
 
@@ -149,7 +149,8 @@
             android:orientation="vertical"
             android:gravity="center">
             <TextView
-                android:text="387"
+                android:id="@+id/following_count"
+                android:text="0"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 android:layout_height="wrap_content"

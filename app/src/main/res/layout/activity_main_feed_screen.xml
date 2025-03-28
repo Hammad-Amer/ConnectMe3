@@ -9,11 +9,12 @@
     android:background="#FFFFFF">
 
     <LinearLayout
+        android:id="@+id/main_feed_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginTop="20dp"
-        >
+        android:layout_above="@id/bottom_navigation"
+        android:layout_marginTop="20dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -30,63 +31,48 @@
                 android:layout_height="wrap_content"
                 android:text="My Community"
                 android:textStyle="bold"
-                android:textSize="30dp"
-                />
-
+                android:textSize="30dp" />
 
             <TextView
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="A place for all your questions"
                 android:textSize="17dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <ImageView
+                android:id="@+id/connectme_dm"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/instagram_dm"
-                android:id="@+id/connectme_dm"/>
-
+                android:src="@drawable/instagram_dm" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/Story_recyclerview_mainfeed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-
             android:scrollbars="none"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-
-            tools:listitem="@layout/story"
-
-            />
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/story" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/feed_posts_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingBottom="90dp"
             android:scrollbars="none"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-
-            tools:listitem="@layout/feed_post"
-
-            />
-
-
-
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/feed_post" />
     </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -98,11 +84,10 @@
         app:menu="@menu/menu"
         app:labelVisibilityMode="labeled"
         app:itemHorizontalTranslationEnabled="false"
-        app:itemIconSize="24dp"
-        />
-
+        app:itemIconSize="24dp" />
 
     <ImageView
+        android:id="@+id/nav_bar_mid_btn"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:src="@drawable/nav_bar_mid"

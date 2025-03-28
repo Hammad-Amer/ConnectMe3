@@ -35,6 +35,7 @@
             />
 
         <ImageView
+            android:id="@+id/requests"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/edit_insta_dms"
@@ -65,245 +66,20 @@
         android:hint="Search for DMs"
         android:padding="12dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="In Contacts"
-        android:textColor="@color/brown"
-        android:textStyle="bold"
-        android:textSize="16dp"
-        android:layout_marginLeft="33dp"
-        android:layout_marginTop="16dp" />
 
-    <LinearLayout
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="33dp"
-        android:layout_marginRight="33dp"
-        android:layout_marginTop="15dp">
+        android:layout_height="20dp"/>
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/pf2"
-            app:shapeAppearanceOverlay="@style/CircleShape"
-            android:layout_centerHorizontal="true"
-
-            />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Henry School"
-            android:textSize="16sp"
-            android:layout_marginStart="16dp" />
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/msg_button_following"
-
-            />
-    </LinearLayout>
-
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_follow"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="33dp"
-        android:layout_marginRight="33dp"
-        android:layout_marginTop="15dp">
+        android:layout_height="550dp"
+        android:layout_marginHorizontal="20dp"
+        android:paddingBottom="10dp"
+        android:scrollbars="vertical"
+        />
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/pf3"
-            app:shapeAppearanceOverlay="@style/CircleShape"
-            android:layout_centerHorizontal="true"
-
-            />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Emily James"
-            android:textSize="16sp"
-            android:layout_marginStart="16dp" />
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/msg_button_following"
-
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="33dp"
-        android:layout_marginRight="33dp"
-        android:layout_marginTop="15dp">
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/pf4"
-            app:shapeAppearanceOverlay="@style/CircleShape"
-            android:layout_centerHorizontal="true"
-
-            />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Lily Thomas"
-            android:textSize="16sp"
-            android:layout_marginStart="16dp" />
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/msg_button_following"
-
-            />
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Invite new friends"
-        android:textColor="@color/brown"
-        android:textStyle="bold"
-        android:textSize="16dp"
-        android:layout_marginLeft="33dp"
-        android:layout_marginTop="16dp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="33dp"
-        android:layout_marginRight="33dp"
-        android:layout_marginTop="15dp">
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/pf6"
-            app:shapeAppearanceOverlay="@style/CircleShape"
-            android:layout_centerHorizontal="true"
-
-            />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Amy Wesley"
-            android:textSize="16sp"
-            android:layout_marginStart="16dp" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_height="30dp"
-            android:layout_width="60dp"
-            android:text="Invite"
-            android:textColor="@color/white"
-            android:textSize="15dp"
-            android:background="@drawable/login_button"
-            android:textAllCaps="false"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="33dp"
-        android:layout_marginRight="33dp"
-        android:layout_marginTop="15dp">
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/pf7"
-            app:shapeAppearanceOverlay="@style/CircleShape"
-            android:layout_centerHorizontal="true"
-
-            />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Laura Ryan"
-            android:textSize="16sp"
-            android:layout_marginStart="16dp" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_height="30dp"
-            android:layout_width="60dp"
-            android:text="Invite"
-            android:textColor="@color/white"
-            android:textSize="15dp"
-            android:background="@drawable/login_button"
-            android:textAllCaps="false"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="33dp"
-        android:layout_marginRight="33dp"
-        android:layout_marginTop="15dp">
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/pf8"
-            app:shapeAppearanceOverlay="@style/CircleShape"
-            android:layout_centerHorizontal="true"
-
-            />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Christopher"
-            android:textSize="16sp"
-            android:layout_marginStart="16dp" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_height="30dp"
-            android:layout_width="60dp"
-            android:text="Invite"
-            android:textColor="@color/white"
-            android:textSize="15dp"
-            android:background="@drawable/login_button"
-            android:textAllCaps="false"
-            />
-    </LinearLayout>
     <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">

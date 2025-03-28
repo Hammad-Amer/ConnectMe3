@@ -1,5 +1,9 @@
 package com.example.connectme
 
-class ModelSearch (
-    val name: String
+data class ModelSearch(
+    val userId: String,
+    val username: String,
+    val profileImageUrl: String,
+    var isFollowed: Boolean,
+    var isPending: Boolean
 )

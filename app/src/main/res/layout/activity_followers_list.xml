@@ -26,10 +26,11 @@
             />
 
         <TextView
+            android:id="@+id/username"
             android:layout_marginStart="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="OliviaD"
+            android:text=""
             android:textSize="20dp"
             android:textStyle="bold"
 
@@ -54,7 +55,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="410 Followers"
+                android:text="Followers"
                 android:textStyle="bold"
                 android:textSize="20dp"
                 android:textColor="@color/brown"
@@ -75,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="20dp"
-            android:text="387 Following"
+            android:text="Following"
             android:gravity="center"
             />
 
@@ -102,7 +103,6 @@
         android:paddingTop="5dp"
 
         android:scrollbars="none"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
 
         tools:listitem="@layout/profile_followers"
         />

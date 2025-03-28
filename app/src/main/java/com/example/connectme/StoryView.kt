@@ -26,7 +26,7 @@ class StoryView : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_story_view)
 
-        userId = FirebaseAuth.getInstance().currentUser?.uid
+        userId = intent.getStringExtra("userId")
 
         if (userId == null) {
             Toast.makeText(this, "User not logged in!", Toast.LENGTH_SHORT).show()

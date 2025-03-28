@@ -53,6 +53,21 @@ class ChatScreen : AppCompatActivity() {
         sendButton = findViewById(R.id.btnSend_vanish)
         usernameTextView = findViewById(R.id.Username_chat)
 
+        var callbutton = findViewById<ImageView>(R.id.Call_chat)
+        var vidcallbutton = findViewById<ImageView>(R.id.VideoCall_chat)
+
+        callbutton.setOnClickListener {
+            val intent = Intent(this, Voicecall::class.java)
+            intent.putExtra("USER_ID", receiverUserId) // pass receiver's user ID dynamically
+            startActivity(intent)
+        }
+
+        vidcallbutton.setOnClickListener {
+            val intent = Intent(this, VideoCall::class.java)
+            intent.putExtra("USER_ID", receiverUserId) // pass receiver's user ID dynamically
+            startActivity(intent)
+        }
+
         // This TextView must exist in your layout (e.g., below usernameTextView).
         // For example: <TextView android:id="@+id/onlineStatusTextView" ... />
         onlineStatusTextView = findViewById(R.id.onlineStatusTextView)

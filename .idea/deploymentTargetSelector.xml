@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DIALOG" />
-        <DropdownSelection timestamp="2025-03-28T09:16:29.901935900Z">
+        <DropdownSelection timestamp="2025-04-23T06:47:25.052122300Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\hamma\.android\avd\temp_help_help.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\hamma\.android\avd\Copy_of_Copy_of_Copy_2_of_Pixel_3_XL_API_35.avd" />
             </handle>
           </Target>
         </DropdownSelection>
@@ -15,16 +15,25 @@
           <targets>
             <Target type="DEFAULT_BOOT">
               <handle>
-                <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\hamma\.android\avd\Copy_of_Copy_of_Copy_2_of_Pixel_3_XL_API_35.avd" />
+                <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\hamma\.android\avd\Copy_of_temp_help_help2.avd" />
               </handle>
             </Target>
             <Target type="DEFAULT_BOOT">
               <handle>
-                <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\hamma\.android\avd\Copy_2_of_Pixel_3_XL_API_35.avd" />
+                <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\hamma\.android\avd\Copy_of_Copy_of_Copy_2_of_Pixel_3_XL_API_35.avd" />
               </handle>
             </Target>
           </targets>
         </DialogSelection>
+      </SelectionState>
+      <SelectionState runConfigName="LoginTest">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="AcceptRequestTest">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="MessageTest">
+        <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
   </component>

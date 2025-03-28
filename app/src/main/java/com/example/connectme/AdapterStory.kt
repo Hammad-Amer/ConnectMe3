@@ -1,9 +1,15 @@
 package com.example.connectme
 
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
 class AdapterStory(
@@ -23,44 +29,80 @@ class AdapterStory(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == USER_STORY) {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.user_story, parent, false)
-            UserStoryViewHolder(view)
+            UserStoryViewHolder(
+                LayoutInflater.from(parent.context).inflate(R.layout.user_story, parent, false)
+            )
         } else {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.story, parent, false)
-            OtherStoryViewHolder(view)
+            OtherStoryViewHolder(
+                LayoutInflater.from(parent.context).inflate(R.layout.story, parent, false)
+            )
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val storyItem = storyList[position]
+        val story = storyList[position]
+        try {
+            val bitmap = decodeBase64ToBitmap(story.profileImage)
+            when (holder) {
+                is UserStoryViewHolder -> {
+                    holder.imageView.setImageBitmap(bitmap)
+                    holder.addIcon.visibility = if (!story.hasActiveStory) View.VISIBLE else View.GONE
 
-        if (holder is UserStoryViewHolder) {
-            holder.imageView.setImageResource(storyItem.image)
+                    holder.itemView.setOnClickListener {
+                        val context = holder.itemView.context
+                        if (story.hasActiveStory) {
+                            val intent = Intent(context, StoryView::class.java)
+                            intent.putExtra("userId", story.userId) // Pass correct userId
+                            context.startActivity(intent)
+                        } else {
+                            Toast.makeText(context, "Press and hold to add story", Toast.LENGTH_SHORT).show()
+                        }
+                    }
 
-            holder.itemView.setOnClickListener {
-                onStoryClick(storyItem)
+                    holder.itemView.setOnLongClickListener {
+                        onStoryLongClick(story)
+                        true
+                    }
+                }
+                is OtherStoryViewHolder -> {
+                    holder.imageView.setImageBitmap(bitmap)
+                    holder.itemView.setOnClickListener {
+                        if (story.hasActiveStory) {
+                            val context = holder.itemView.context
+                            val intent = Intent(context, StoryView::class.java)
+                            intent.putExtra("userId", story.userId)
+                            context.startActivity(intent)
+                        }
+                    }
+                }
             }
-
-            holder.itemView.setOnLongClickListener {
-                onStoryLongClick(storyItem)
-                true
+        } catch (e: Exception) {
+            Log.e("AdapterStory", "Error loading image", e)
+            when (holder) {
+                is UserStoryViewHolder -> {
+                    holder.imageView.setImageResource(R.drawable.connectme_logo)
+                    holder.addIcon.visibility = View.VISIBLE
+                }
+                is OtherStoryViewHolder -> {
+                    holder.imageView.setImageResource(R.drawable.connectme_logo)
+                }
             }
-        } else if (holder is OtherStoryViewHolder) {
-            holder.imageView.setImageResource(storyItem.image)
         }
     }
 
-    override fun getItemCount(): Int {
-        return storyList.size
+    override fun getItemCount(): Int = storyList.size
+
+    private fun decodeBase64ToBitmap(encodedString: String): Bitmap {
+        val decodedBytes = Base64.decode(encodedString, Base64.DEFAULT)
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
     }
 
     class UserStoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView: ImageView = itemView.findViewById(R.id.user_ownstory_profile_image)
+        val addIcon: ImageView = itemView.findViewById(R.id.add_story_icon)
     }
 
     class OtherStoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView: ImageView = itemView.findViewById(R.id.story_profile)
     }
 }
-
-

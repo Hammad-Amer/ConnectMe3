@@ -7,9 +7,14 @@
     android:layout_marginBottom="16dp"
     android:gravity="center_vertical">
 
+    <ImageView
+        android:id="@+id/profile_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/connectme_logo" />
 
     <TextView
-
         android:id="@+id/textName_search_history"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -18,10 +23,19 @@
         android:textSize="18dp"
         android:paddingLeft="0dp"/>
 
-    <ImageView
+    <Button
+        android:id="@+id/follow_button"
         android:layout_width="100dp"
-        android:layout_height="18dp"
-        android:paddingRight="20dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="20dp"
+        android:text="Follow"
+        android:contentDescription="Follow Button"/>
+
+    <ImageView
+        android:id="@+id/cross_button"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:paddingRight="4dp"
         android:src="@drawable/cross"
         />
 </LinearLayout>

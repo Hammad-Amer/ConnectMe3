@@ -19,9 +19,9 @@ class Voicecall : AppCompatActivity() {
     private var agoraEngine: RtcEngine? = null
 
     // Agora configuration values (same as video call)
-    private val appID = "36295f39cb944b3aa2ea0a9f0d613794"
+    private val appID = "252679a960064a95ab4ed65705789b33"
     private val channelName = "connectme"
-    private val token = "007eJxTYNB8zNNzfNYD0wUPfyzcrxXHF/92H7MN/8TgTTPKwy81qPkrMBibGVmaphlbJidZmpgkGScmGqUmGiRaphmkmBkam1ua8BU8SG8IZGRYseUkMyMDBIL4nAzJ+Xl5qckluakMDAAGjSHR"
+    private val token = "007eJxTYLi3t+hBrFlNjc9zO8+jnmn/7Ys2dLTxx9YxKV67+u9AlZ4CQ1paUrKRYUpiSrKFkYlhYmJSSpKFYZqxGVDEyMzYPG1ZD0dGQyAjQz2/LwsjAwSC+JwMyfl5eanJJbmpDAwAUI0iMw=="
     private val uid = 0
 
     private var isJoined = false
@@ -68,6 +68,7 @@ class Voicecall : AppCompatActivity() {
         gotoChat.setOnClickListener {
             leaveCall()
             startActivity(Intent(this, ChatScreen::class.java))
+            finish()
         }
 
         // Switch to video call: Navigate to VideoCall screen

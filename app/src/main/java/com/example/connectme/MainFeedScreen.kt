@@ -29,19 +29,27 @@ import retrofit2.Response
 
 class MainFeedScreen : AppCompatActivity() {
 
+    private val storyList = mutableListOf<ModelStory>()
+    private lateinit var adapterStory: AdapterStory
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_feed_screen)
 
-        checkAndDeleteExpiredStory()
+        adapterStory = AdapterStory(
+            storyList,
+            { story -> handleStoryClick(story) },
+            { story -> handleStoryLongClick(story) }
+        )
 
-        setupStoriesRecyclerView()
-        setupFeedPostsRecyclerView()
-        setupDMButton()
-        setupBottomNavigation()
+        setupRecyclerView()
+        loadInitialData()
+        setupUIComponents()
 
-        //sendNotification()
+
+
+        sendNotification()
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             Dexter.withContext(applicationContext)
@@ -100,98 +108,225 @@ class MainFeedScreen : AppCompatActivity() {
             }
     }
 
-    private fun setupStoriesRecyclerView() {
-        val storyList = mutableListOf<ModelStory>()
-        storyList.add(ModelStory(AdapterStory.USER_STORY, R.drawable.pf1))
-        storyList.add(ModelStory(AdapterStory.OTHER_STORY, R.drawable.pf2))
-        storyList.add(ModelStory(AdapterStory.OTHER_STORY, R.drawable.pf3))
-        storyList.add(ModelStory(AdapterStory.OTHER_STORY, R.drawable.pf4))
-        storyList.add(ModelStory(AdapterStory.OTHER_STORY, R.drawable.pf5))
-        storyList.add(ModelStory(AdapterStory.OTHER_STORY, R.drawable.pf6))
-        storyList.add(ModelStory(AdapterStory.OTHER_STORY, R.drawable.pf7))
-
-        val rvStories = findViewById<RecyclerView>(R.id.Story_recyclerview_mainfeed)
-        rvStories.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-
-        rvStories.adapter = AdapterStory(
-            storyList,
-            onStoryClick = { clickedStory ->
-                if (clickedStory.type == AdapterStory.USER_STORY) {
-                    checkAndOpenStory()
-                }
-            },
-            onStoryLongClick = { clickedStory ->
-                if (clickedStory.type == AdapterStory.USER_STORY) {
-                    openUploadStoryPage()
-                }
-            }
-        )
+    private fun setupRecyclerView() {
+        findViewById<RecyclerView>(R.id.Story_recyclerview_mainfeed).apply {
+            layoutManager = LinearLayoutManager(
+                this@MainFeedScreen,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            adapter = adapterStory
+            setHasFixedSize(true)
+        }
     }
 
-    private fun checkAndDeleteExpiredStory() {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
-        val databaseRef = FirebaseDatabase.getInstance()
-            .getReference("Users")
-            .child(userId)
-            .child("stories")
 
-        databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    val storyTimestamp = snapshot.child("timestamp").getValue(Long::class.java)
+    private fun loadInitialData() {
+        checkAndDeleteExpiredStory()
+        fetchStoriesFromFollowing()
+    }
 
-                    if (storyTimestamp != null) {
-                        val currentTime = System.currentTimeMillis()
+    private fun setupUIComponents() {
+        setupFeedPostsRecyclerView()
+        setupDMButton()
+        setupBottomNavigation()
+    }
 
-                        if (currentTime - storyTimestamp >= 86400000) {
-                            databaseRef.removeValue()
-                                .addOnSuccessListener {
-                                    Toast.makeText(
-                                        this@MainFeedScreen,
-                                        "Story expired and deleted",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+    private fun handleStoryClick(story: ModelStory) {
+        if (story.hasActiveStory) {
+            openStoryViewer(story.userId)
+        } else if (story.type == AdapterStory.USER_STORY) {
+            Toast.makeText(this, "Press and hold to add story", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun handleStoryLongClick(story: ModelStory) {
+        if (story.type == AdapterStory.USER_STORY) {
+            openUploadStoryPage()
+        }
+    }
+
+    private fun fetchStoriesFromFollowing() {
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val database = FirebaseDatabase.getInstance().reference
+
+        storyList.clear()
+
+        database.child("Users/$currentUserId").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(currentUserSnapshot: DataSnapshot) {
+                val currentUserProfile = currentUserSnapshot.child("profileImage").getValue(String::class.java) ?: ""
+                val currentUserStorySnapshot = currentUserSnapshot.child("stories")
+                val hasActiveStory = currentUserStorySnapshot.exists() &&
+                        (System.currentTimeMillis() - (currentUserStorySnapshot.child("timestamp").getValue(Long::class.java)
+                            ?: 0L) < 86400000)
+
+                storyList.add(ModelStory(
+                    type = AdapterStory.USER_STORY,
+                    userId = currentUserId,
+                    profileImage = currentUserProfile,
+                    mediaData = if (hasActiveStory) currentUserStorySnapshot.child("mediaData").getValue(String::class.java) else null,
+                    mediaType = if (hasActiveStory) currentUserStorySnapshot.child("mediaType").getValue(String::class.java) else null,
+                    timestamp = if (hasActiveStory) currentUserStorySnapshot.child("timestamp").getValue(Long::class.java) else null,
+                    hasActiveStory = hasActiveStory
+                ))
+
+                database.child("Users/$currentUserId/following")
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(followingSnapshot: DataSnapshot) {
+                            followingSnapshot.children.forEach { child ->
+                                val followedUserId = child.key ?: return@forEach
+                                if (followedUserId == currentUserId) return@forEach
+
+                                database.child("Users/$followedUserId").addListenerForSingleValueEvent(object : ValueEventListener {
+                                    override fun onDataChange(userSnapshot: DataSnapshot) {
+                                        val profileImage = userSnapshot.child("profileImage").getValue(String::class.java) ?: ""
+                                        val storySnapshot = userSnapshot.child("stories")
+                                        val hasActiveStory = storySnapshot.exists() &&
+                                                (System.currentTimeMillis() - (storySnapshot.child("timestamp").getValue(Long::class.java)
+                                                    ?: 0L) < 86400000)
+
+                                        if (hasActiveStory) {
+                                            storyList.add(ModelStory(
+                                                type = AdapterStory.OTHER_STORY,
+                                                userId = followedUserId,
+                                                profileImage = profileImage,
+                                                mediaData = storySnapshot.child("mediaData").getValue(String::class.java),
+                                                mediaType = storySnapshot.child("mediaType").getValue(String::class.java),
+                                                timestamp = storySnapshot.child("timestamp").getValue(Long::class.java),
+                                                hasActiveStory = true
+                                            ))
+                                        }
+                                        adapterStory.notifyDataSetChanged()
+                                    }
+                                    override fun onCancelled(error: DatabaseError) {
+                                        Log.e("MainFeedScreen", "Error loading user $followedUserId", error.toException())
+                                    }
+                                })
+                            }
                         }
-                    }
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@MainFeedScreen, "Error checking story", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun checkAndOpenStory() {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
-        val databaseRef = FirebaseDatabase.getInstance()
-            .getReference("Users")
-            .child(userId)
-            .child("stories") // Make sure this matches your actual path
-
-        databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    openStoryViewer(userId) // Pass the user ID
-                } else {
-                    Toast.makeText(this@MainFeedScreen, "No stories available", Toast.LENGTH_SHORT).show()
-                }
+                        override fun onCancelled(error: DatabaseError) {
+                            Log.e("MainFeedScreen", "Error loading follows", error.toException())
+                        }
+                    })
             }
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@MainFeedScreen, "Error loading story", Toast.LENGTH_SHORT).show()
+                Log.e("MainFeedScreen", "Error loading current user", error.toException())
             }
         })
     }
 
     private fun setupFeedPostsRecyclerView() {
-        val feedPostsList = mutableListOf<ModelFeedPosts>()
-        feedPostsList.add(ModelFeedPosts("Raja Muhammad Adil Nadeem", R.drawable.pf6, R.drawable.adil1, "G-13"))
-        feedPostsList.add(ModelFeedPosts("Affan Ahmed Swati", R.drawable.pf7, R.drawable.feed_post2, "From Palestine btw"))
+        fetchFeedPostsFromFollowing()
+    }
 
+    private fun fetchFeedPostsFromFollowing() {
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val database = FirebaseDatabase.getInstance().reference
+        val postsList = mutableListOf<ModelFeedPosts>()
+
+        database.child("Users/$currentUserId/following")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(followingSnapshot: DataSnapshot) {
+                    val followingUserIds = mutableListOf<String>()
+                    followingSnapshot.children.forEach { child ->
+                        child.key?.let { followingUserIds.add(it) }
+                    }
+                    followingUserIds.add(currentUserId)
+
+                    for (userId in followingUserIds) {
+                        database.child("Users/$userId/posts")
+                            .addListenerForSingleValueEvent(object : ValueEventListener {
+                                override fun onDataChange(postsSnapshot: DataSnapshot) {
+                                    for (postSnapshot in postsSnapshot.children) {
+                                        val postId = postSnapshot.key ?: continue
+                                        val caption = postSnapshot.child("caption").getValue(String::class.java) ?: ""
+                                        val imageBase64 = postSnapshot.child("imageBase64").getValue(String::class.java) ?: ""
+                                        val timestamp = postSnapshot.child("timestamp").getValue(Long::class.java) ?: 0L
+
+                                        val likesSnapshot = postSnapshot.child("likes")
+                                        val likeCount = likesSnapshot.childrenCount.toInt()
+                                        val isLiked = likesSnapshot.hasChild(currentUserId)
+
+                                        database.child("Users/$userId/profileImage")
+                                            .addListenerForSingleValueEvent(object : ValueEventListener {
+                                                override fun onDataChange(profileSnapshot: DataSnapshot) {
+                                                    val profileImageBase64 = profileSnapshot.getValue(String::class.java) ?: ""
+
+                                                    database.child("Users/$userId/username")
+                                                        .addListenerForSingleValueEvent(object : ValueEventListener {
+                                                            override fun onDataChange(usernameSnapshot: DataSnapshot) {
+                                                                val username = usernameSnapshot.getValue(String::class.java) ?: userId
+                                                                val postModel = ModelFeedPosts(
+                                                                    postId = postId,
+                                                                    userId = userId,
+                                                                    username = username,
+                                                                    image = profileImageBase64,
+                                                                    post = imageBase64,
+                                                                    caption = caption,
+                                                                    timestamp = timestamp,
+                                                                    likeCount = likeCount,
+                                                                    isLiked = isLiked
+                                                                )
+                                                                postsList.add(postModel)
+                                                                postsList.sortByDescending { it.timestamp }
+                                                                updatePostsRecyclerView(postsList)
+                                                            }
+
+                                                            override fun onCancelled(error: DatabaseError) {}
+                                                        })
+                                                }
+
+                                                override fun onCancelled(error: DatabaseError) {}
+                                            })
+                                    }
+                                }
+                                override fun onCancelled(error: DatabaseError) {
+                                    Log.e("MainFeedScreen", "Error fetching posts for user $userId", error.toException())
+                                }
+                            })
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("MainFeedScreen", "Error fetching following list", error.toException())
+                }
+            })
+    }
+
+    private fun updatePostsRecyclerView(postsList: List<ModelFeedPosts>) {
         val rvPosts = findViewById<RecyclerView>(R.id.feed_posts_recyclerview)
         rvPosts.layoutManager = LinearLayoutManager(this)
-        rvPosts.adapter = AdapterFeedPosts(feedPostsList)
+        rvPosts.adapter = AdapterFeedPosts(postsList)
+    }
+
+    private fun checkAndDeleteExpiredStory() {
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val storiesRef = FirebaseDatabase.getInstance().getReference("Users/$currentUserId/stories")
+        storiesRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val timestamp = snapshot.child("timestamp").getValue(Long::class.java) ?: 0L
+                    if (System.currentTimeMillis() - timestamp >= 86400000) {
+                        storiesRef.removeValue().addOnSuccessListener {
+                            Log.d("MainFeedScreen", "Expired story removed")
+                            adapterStory.notifyDataSetChanged()
+                        }
+                    }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("MainFeedScreen", "Error checking story expiration", error.toException())
+            }
+        })
+    }
+
+    private fun openStoryViewer(userId: String) {
+        startActivity(Intent(this, StoryView::class.java).apply {
+            putExtra("USER_ID", userId)
+        })
+    }
+
+    private fun openUploadStoryPage() {
+        startActivity(Intent(this, UploadStory::class.java))
     }
 
     private fun setupDMButton() {
@@ -202,7 +337,6 @@ class MainFeedScreen : AppCompatActivity() {
 
     private fun setupBottomNavigation() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> true
@@ -227,15 +361,5 @@ class MainFeedScreen : AppCompatActivity() {
         }
     }
 
-    private fun openStoryViewer(userId: String) {
-        val intent = Intent(this, StoryView::class.java).apply {
-            putExtra("USER_ID", userId)
-        }
-        startActivity(intent)
-    }
 
-    private fun openUploadStoryPage() {
-        val intent = Intent(this, UploadStory::class.java)
-        startActivity(intent)
-    }
 }

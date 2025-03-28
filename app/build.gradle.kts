@@ -69,10 +69,12 @@ dependencies {
     androidTestImplementation(libs.test.rules)
 
     implementation(libs.full.sdk)
-
+    implementation(libs.glide)
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("com.karumi:dexter:6.2.3")
     implementation("com.google.auth:google-auth-library-oauth2-http:1.19.0")
-
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.espresso.contrib)
+    androidTestImplementation(libs.androidx.espresso.intents)
 }

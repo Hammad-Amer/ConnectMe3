@@ -1,6 +1,6 @@
 package com.example.connectme
 
-class ModelFollowing (
-    val image: Int,
-    val name: String,
+data class ModelFollowing(
+    val profileBase64: String,
+    val username: String
 )
