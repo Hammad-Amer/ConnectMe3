@@ -14,7 +14,9 @@ import com.google.firebase.auth.FirebaseAuth
 import android.graphics.BitmapFactory
 import android.util.Base64
 import com.google.android.material.imageview.ShapeableImageView
-
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import com.google.firebase.database.*
 
 class ChatScreen : AppCompatActivity() {
@@ -147,6 +149,50 @@ class ChatScreen : AppCompatActivity() {
         }
     }
 
+    private fun sendNotificationToReceiver(messageText: String) {
+        // Retrieve the receiver's token from the Users node
+        FirebaseDatabase.getInstance().getReference("Users")
+            .child(receiverUserId)
+            .child("token")
+            .get().addOnSuccessListener { snapshot ->
+                val receiverToken = snapshot.getValue(String::class.java)
+                if (!receiverToken.isNullOrEmpty()) {
+                    // Build the notification payload
+                    val notification = Notification(
+                        message = NotificationData(
+                            token = receiverToken,
+                            hashMapOf(
+                                "title" to "New Message",
+                                "body" to messageText
+                            )
+                        )
+                    )
+
+                    Log.d("FCM1", "Notification sent to receiver $receiverToken")
+                    // Send the notification via your API
+                    NotificationApi.create().sendNotification(notification)
+                        .enqueue(object : Callback<Notification> {
+                            override fun onResponse(
+                                call: Call<Notification>,
+                                response: Response<Notification>
+                            ) {
+                                Log.d("FCM", "Notification sent to receiver")
+                            }
+
+                            override fun onFailure(call: Call<Notification>, t: Throwable) {
+                                Log.e("FCM", "Error sending notification: ${t.message}")
+                            }
+                        })
+                } else {
+                    Log.e("FCM", "Receiver token is null or empty")
+                }
+            }.addOnFailureListener { e ->
+                Log.e("FCM", "Failed to fetch receiver token", e)
+            }
+    }
+
+
+
     private fun fetchReceiverUsername() {
         val usersRef = database.child("Users").child(receiverUserId)
         val profileImageView = findViewById<ShapeableImageView>(R.id.Main_profile_pic_chat)
@@ -194,6 +240,7 @@ class ChatScreen : AppCompatActivity() {
                 .addOnSuccessListener {
                     Log.d("RealtimeDB", "Message sent: $messageText")
                     etMessage.text.clear()
+                    sendNotificationToReceiver(messageText)
                 }
                 .addOnFailureListener { e ->
                     Log.e("RealtimeDB", "Failed to send message", e)

@@ -7,7 +7,10 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.connectme.FirebaseConsts.USER_PATH
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.messaging.FirebaseMessaging
 
 class LoginPage : AppCompatActivity() {
     private lateinit var email: EditText
@@ -59,9 +62,22 @@ class LoginPage : AppCompatActivity() {
                     Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, MainFeedScreen::class.java))
                     finish()
+                    setToken()
                 } else {
                     Toast.makeText(this, "Login failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
+    }
+
+    private fun setToken(){
+        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+            if(it.isNotEmpty())
+            {
+                FirebaseDatabase.getInstance().getReference(USER_PATH)
+                    .child(FirebaseAuth.getInstance().uid!!)
+                    .updateChildren(mapOf("token" to it))
+            }
+        }
+
     }
 }

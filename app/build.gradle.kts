@@ -39,6 +39,11 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    packagingOptions{
+        exclude("META-INF/DEPENDENCIES")
+    }
+
 }
 
 dependencies {
@@ -55,6 +60,7 @@ dependencies {
     implementation(libs.googleid)
     implementation(libs.firebase.database)
     implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.messaging)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -64,6 +70,9 @@ dependencies {
 
     implementation(libs.full.sdk)
 
-
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation("com.karumi:dexter:6.2.3")
+    implementation("com.google.auth:google-auth-library-oauth2-http:1.19.0")
 
 }

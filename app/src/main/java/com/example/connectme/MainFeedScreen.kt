@@ -1,18 +1,34 @@
 package com.example.connectme
 
+import android.Manifest
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.StrictMode
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.connectme.FirebaseConsts.USER_PATH
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.single.PermissionListener
+
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainFeedScreen : AppCompatActivity() {
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +40,64 @@ class MainFeedScreen : AppCompatActivity() {
         setupFeedPostsRecyclerView()
         setupDMButton()
         setupBottomNavigation()
+
+        //sendNotification()
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            Dexter.withContext(applicationContext)
+                .withPermission(Manifest.permission.POST_NOTIFICATIONS)
+                .withListener(object : PermissionListener {
+                    override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
+
+                    }
+
+                    override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
+
+                    }
+
+                    override  fun onPermissionRationaleShouldBeShown(p0: PermissionRequest?, p1: PermissionToken?) {
+                        p1?.continuePermissionRequest()
+                    }
+
+                }).check()
+
+        }
+
+        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy)
+
+
+    }
+
+    private fun sendNotification() {
+        FirebaseDatabase.getInstance().getReference(USER_PATH).child(FirebaseAuth.getInstance().uid!!).child("token")
+            .get().addOnSuccessListener {
+                val token = it.getValue(String::class.java)
+
+                val notification = Notification(
+                    message = NotificationData(
+                        token = token,
+                        hashMapOf("title" to "Hello","body" to "Helllooooooo")
+
+                    )
+                )
+
+
+
+                NotificationApi.create().sendNotification(notification)
+                    .enqueue(object : Callback<Notification> {
+                        override fun onResponse(
+                            p0: Call<Notification>,
+                            p1: Response<Notification>
+                        ) {
+                            Toast.makeText(this@MainFeedScreen, "Notification sent", Toast.LENGTH_SHORT).show()
+                        }
+
+                        override fun onFailure(p0: Call<Notification>, p1: Throwable) {
+                            Toast.makeText(this@MainFeedScreen, "error ${p1.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    })
+            }
     }
 
     private fun setupStoriesRecyclerView() {
