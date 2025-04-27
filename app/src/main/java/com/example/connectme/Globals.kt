@@ -8,6 +8,7 @@ object Globals {
 
     const val BASE_URL = "http://10.0.2.2/connectme/"
 
+
     fun isInternetAvailable(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val network = connectivityManager.activeNetwork ?: return false
