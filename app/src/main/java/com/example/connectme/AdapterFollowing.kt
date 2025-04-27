@@ -18,6 +18,9 @@ class AdapterFollowing(private val followersList: List<ModelFollowing>) :
         val username: TextView = view.findViewById(R.id.textName_following)
     }
 
+
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowersViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.profile_followers, parent, false)

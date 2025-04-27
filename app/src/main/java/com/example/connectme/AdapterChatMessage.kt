@@ -54,6 +54,9 @@ class AdapterChatMessage(
         }
     }
 
+
+
+
     override fun getItemCount(): Int = messages.size
 
     inner class SentMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

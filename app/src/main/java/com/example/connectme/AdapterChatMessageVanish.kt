@@ -91,6 +91,9 @@ class AdapterChatMessageVanish(
                     }
                 }
 
+
+
+
                 override fun onCancelled(error: DatabaseError) {
                     Log.e("AdapterVanish", "Failed to load profile image", error.toException())
                     profileImage.setImageResource(R.drawable.hard_pfp)

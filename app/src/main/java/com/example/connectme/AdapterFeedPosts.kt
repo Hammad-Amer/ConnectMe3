@@ -24,6 +24,9 @@ class AdapterFeedPosts(private val feedPostsList: List<ModelFeedPosts>) : Recycl
         return FeedPostViewHolder(view)
     }
 
+
+
+
     override fun onBindViewHolder(holder: FeedPostViewHolder, position: Int) {
         val post = feedPostsList[position]
 
