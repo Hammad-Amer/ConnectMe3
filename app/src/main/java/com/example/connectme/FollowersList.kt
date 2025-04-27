@@ -52,6 +52,7 @@ class FollowersList : AppCompatActivity() {
             Request.Method.GET, url,
             { response ->
                 try {
+
                     val json = JSONObject(response)
                     if (json.getString("status") == "success") {
                         val followersArray = json.getJSONObject("data").getJSONArray("followers")

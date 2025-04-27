@@ -25,6 +25,7 @@ class EditProfile : AppCompatActivity() {
     private lateinit var contactEditText: EditText
     private lateinit var headerNameText: TextView
 
+
     private val PICK_IMAGE_REQUEST = 1
     private var currentBase64Image: String? = null
     private var newImageSelected = false

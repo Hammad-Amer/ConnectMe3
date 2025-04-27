@@ -36,6 +36,7 @@ class FollowingList : AppCompatActivity() {
         fetchFollowing()
     }
 
+
     private fun fetchFollowing() {
 
         val sharedPref = getSharedPreferences("ConnectMePref", MODE_PRIVATE)
