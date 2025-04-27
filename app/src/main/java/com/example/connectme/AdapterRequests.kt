@@ -26,6 +26,7 @@ class AdapterRequests(
         val rejectButton: Button = itemView.findViewById(R.id.rejectButton)
     }
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_request, parent, false)

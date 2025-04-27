@@ -23,6 +23,8 @@ class AdapterStory(
         const val OTHER_STORY = 2
     }
 
+
+
     override fun getItemViewType(position: Int): Int {
         return storyList[position].type
     }

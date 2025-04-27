@@ -364,6 +364,7 @@ class ChatScreen : AppCompatActivity() {
             return
         }
 
+
         // 3) Otherwise show your Edit/Delete dialog as before:
         val options = arrayOf("Edit", "Delete")
         AlertDialog.Builder(this)
