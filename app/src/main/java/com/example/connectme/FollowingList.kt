@@ -33,6 +33,7 @@ class FollowingList : AppCompatActivity() {
         fetchFollowing()
     }
 
+
     private fun fetchFollowing() {
         val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: return
         val followingRef = FirebaseDatabase.getInstance().getReference("Users").child(currentUserId).child("following")

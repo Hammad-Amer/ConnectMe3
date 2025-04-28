@@ -77,6 +77,8 @@ class DMs : AppCompatActivity() {
         val usersRef = FirebaseDatabase.getInstance().reference.child("Users")
         dmList.clear()
 
+
+
         for (userId in userIds) {
             usersRef.child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {

@@ -2,6 +2,8 @@ package com.example.connectme
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.NotificationManager
+
 import android.content.Intent
 import android.database.ContentObserver
 import android.graphics.BitmapFactory
@@ -26,6 +28,12 @@ import retrofit2.Response
 
 class ChatScreen : AppCompatActivity() {
 
+    private lateinit var screenshotObserver : ContentObserver
+    private var recv_id = ""
+    private val curr_userName = ""
+    private var lastScreenshotPath: String?= null
+    private var lastScreenshotTime: Long = 0
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var etMessage: EditText
     private lateinit var sendButton: ImageView
@@ -41,7 +49,7 @@ class ChatScreen : AppCompatActivity() {
         intent.getStringExtra("USER_ID") ?: "" // Get the receiver ID from intent
     }
 
-    private var screenshotObserver: ContentObserver? = null
+
     private lateinit var chatRoomId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,8 +98,15 @@ class ChatScreen : AppCompatActivity() {
         // Listen for messages in this chat
         listenForMessages()
 
-        // Screenshot observer (already in your code)
-        registerScreenshotObserver()
+
+        val handler = Handler(Looper.getMainLooper())
+
+        screenshotObserver = object : ContentObserver(handler) {
+            override fun onChange(selfChange: Boolean) {
+                super.onChange(selfChange)
+                checkForScreenshot()
+            }
+        }
 
         // Button listeners
         sendButton.setOnClickListener { sendMessage() }
@@ -147,95 +162,41 @@ class ChatScreen : AppCompatActivity() {
         })
     }
 
-    // SCREENSHOT OBSERVER (UNCHANGED)
-    private fun registerScreenshotObserver() {
-        screenshotObserver = object : ContentObserver(Handler(Looper.getMainLooper())) {
-            override fun onChange(selfChange: Boolean, uri: Uri?) {
-                super.onChange(selfChange, uri)
-                Log.d("ContentObserver", "onChange triggered, URI: $uri")
-                // Query MediaStore for the latest image in the Screenshots folder.
-                val projection = arrayOf(MediaStore.Images.Media.DATA)
-                val selection = "${MediaStore.Images.Media.DATA} LIKE ?"
-                val selectionArgs = arrayOf("%/Pictures/Screenshots/%")
-                contentResolver.query(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    projection,
-                    selection,
-                    selectionArgs,
-                    "${MediaStore.Images.Media.DATE_ADDED} DESC"
-                )?.use { cursor ->
-                    if (cursor.moveToFirst()) {
-                        val filePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
-                        // Immediately send notification once a new screenshot is detected.
-                        if (filePath.contains("Screenshots", ignoreCase = true) ||
-                            filePath.contains("Screenshot", ignoreCase = true)) {
-                            Log.d("ContentObserver", "Screenshot detected: $filePath")
-                            sendScreenshotNotification()
-                        }
+
+
+    private fun checkForScreenshot() {
+        val projection = arrayOf(
+            MediaStore.Images.Media.DATE_ADDED,
+            MediaStore.Images.Media.DATA
+        )
+
+        val cursor = contentResolver.query(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            projection,
+            null,
+            null,
+            MediaStore.Images.Media.DATE_ADDED + " DESC"
+        )
+
+        cursor?.use {
+            if (it.moveToFirst()) {
+                val path = it.getString(it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
+                val now = System.currentTimeMillis()
+                if (path.lowercase().contains("screenshot") && path != lastScreenshotPath  && now - lastScreenshotTime > 5000) {
+                    lastScreenshotPath = path
+                    lastScreenshotTime = now
+                    runOnUiThread {
+                        sendNotificationToReceiver(" took a screenshot of the chat!")
+
+
                     }
                 }
             }
+           }
         }
-        contentResolver.registerContentObserver(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            true,
-            screenshotObserver!!
-        )
-        Log.d("ContentObserver", "Screenshot observer registered")
-    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        // Unregister the observer when the activity is destroyed.
-        screenshotObserver?.let { contentResolver.unregisterContentObserver(it) }
-    }
 
-    // NOTIFY OTHER USER OF A SCREENSHOT
-    private fun sendScreenshotNotification() {
-        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: return
-        // Fetch sender's username
-        FirebaseDatabase.getInstance().getReference("Users")
-            .child(currentUserId)
-            .child("username")
-            .get().addOnSuccessListener { senderSnapshot ->
-                val senderUsername = senderSnapshot.getValue(String::class.java) ?: "Someone"
-                // Then, fetch the receiver's token
-                FirebaseDatabase.getInstance().getReference("Users")
-                    .child(receiverUserId)
-                    .child("token")
-                    .get().addOnSuccessListener { tokenSnapshot ->
-                        val receiverToken = tokenSnapshot.getValue(String::class.java)
-                        if (!receiverToken.isNullOrEmpty()) {
-                            // Build notification payload for screenshot detection
-                            val notification = Notification(
-                                message = NotificationData(
-                                    token = receiverToken,
-                                    data = hashMapOf(
-                                        "title" to senderUsername,
-                                        "body" to "$senderUsername took a screenshot of your chat!"
-                                    )
-                                )
-                            )
-                            Log.d("FCM", "Sending screenshot notification to token: $receiverToken")
-                            NotificationApi.create().sendNotification(notification)
-                                .enqueue(object : Callback<Notification> {
-                                    override fun onResponse(call: Call<Notification>, response: Response<Notification>) {
-                                        Log.d("FCM", "Screenshot notification sent successfully")
-                                    }
-                                    override fun onFailure(call: Call<Notification>, t: Throwable) {
-                                        Log.e("FCM", "Error sending screenshot notification: ${t.message}")
-                                    }
-                                })
-                        } else {
-                            Log.e("FCM", "Receiver token is null or empty")
-                        }
-                    }.addOnFailureListener { e ->
-                        Log.e("FCM", "Failed to fetch receiver token", e)
-                    }
-            }.addOnFailureListener { e ->
-                Log.e("FCM", "Failed to fetch sender username", e)
-            }
-    }
+
 
     private fun handleMessageLongPress(message: ModelChat, position: Int) {
         // Check if the current user is the sender
@@ -290,6 +251,19 @@ class ChatScreen : AppCompatActivity() {
             }
             .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
             .show()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        contentResolver.unregisterContentObserver(screenshotObserver)
+    }
+    override fun onResume() {
+        super.onResume()
+        contentResolver.registerContentObserver(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            true,
+            screenshotObserver
+        )
     }
 
     private fun deleteMessage(message: ModelChat) {
@@ -424,6 +398,11 @@ class ChatScreen : AppCompatActivity() {
                 Log.e("RealtimeDB", "Error fetching messages", error.toException())
             }
         })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        contentResolver.unregisterContentObserver(screenshotObserver)
     }
 
     private fun generateChatRoomId(user1: String, user2: String): String {
