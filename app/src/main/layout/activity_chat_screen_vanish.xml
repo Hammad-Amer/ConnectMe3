@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/acitivity_chat_screen_vanish"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".ChatScreen"
+    >
+
+    <ImageView
+        android:id="@+id/BackButton_chat"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="25dp"
+
+        android:src="@drawable/back_white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/Username_chat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Henry Benjamin"
+        android:textStyle="bold"
+        android:textSize="26dp"
+        android:textColor="@color/white"
+        android:layout_marginTop="34dp"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/BackButton_chat"
+        android:layout_marginStart="16dp"
+        />
+
+    <ImageView
+        android:id="@+id/Call_chat"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/telephone_white"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="50dp"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="65dp"
+        />
+
+    <ImageView
+        android:id="@+id/VideoCall_chat"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:src="@drawable/video_call_white"
+        android:layout_marginTop="34dp"
+
+        android:layout_marginStart="30dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="15dp"
+        />
+
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/Main_profile_pic_chat"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="24dp"
+
+        android:src="@drawable/pf5"
+        app:shapeAppearanceOverlay="@style/CircleShape"
+        app:layout_constraintTop_toBottomOf="@id/Username_chat"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/view_profile_chat"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:text="View Profile"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        android:background="@drawable/chat_button_2"
+
+        app:layout_constraintTop_toBottomOf="@id/Main_profile_pic_chat"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewMessages_chat"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/view_profile_chat"
+        app:layout_constraintBottom_toTopOf="@id/chat_input_box"
+        android:padding="16dp"
+        tools:listitem="@layout/chat_message_sent_vanish"
+        />
+
+
+
+    <LinearLayout
+        android:id="@+id/chat_input_box"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        android:background="@drawable/chatbox2"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+
+        <EditText
+            android:id="@+id/etMessage"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:hint="Typing..."
+            android:textColor="@color/white"
+            android:textColorHint="#CACACA"
+            android:background="@android:color/transparent"
+            android:paddingStart="16dp"
+
+            />
+
+        <ImageView
+            android:id="@+id/btnSend_vanish"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/send_msg_2"
+            android:padding="8dp"
+
+            />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

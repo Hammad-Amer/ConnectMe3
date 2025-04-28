@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#DDDDDD"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TakePicture"
+    android:id="@+id/activity_take_picture"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="40dp">
+
+        <ImageView
+            android:id="@+id/close_button_take_picture"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/cross"
+            android:layout_marginLeft="15dp"
+            />
+
+
+        <TextView
+            android:id="@+id/next_button_take_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next"
+            android:textColor="@color/brown"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_marginLeft="280dp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/camera_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/post_story_text"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="700dp"
+        android:paddingTop="16dp"
+        android:paddingRight="16dp"
+        android:paddingLeft="16dp"
+        >
+
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/userprofile_img1"
+                android:clipToOutline="true"
+                android:layout_marginRight="50dp"
+                android:background="@drawable/picture_border" />
+
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginHorizontal="32dp"
+
+            android:src="@drawable/camera_button" />
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="50dp"
+            android:src="@drawable/flip_camera2" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/post_story_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+
+
+     >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Post"
+            android:textStyle="bold"
+            android:textColor="@color/brown"
+            android:layout_marginLeft="93dp"
+            android:textSize="18dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Story"
+            android:textColor="@color/black"
+            android:layout_marginLeft="50dp"
+            android:textSize="18dp"/>
+    </LinearLayout>
+
+</RelativeLayout>
