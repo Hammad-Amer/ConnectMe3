@@ -132,6 +132,7 @@ class UploadStory : AppCompatActivity() {
         return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT)
     }
 
+
     private fun uploadStoryToServer(mediaBase64: String, mediaType: String) {
         val url = Globals.BASE_URL+"uploadstories.php"  // Replace with your actual endpoint
         val requestQueue = Volley.newRequestQueue(this)

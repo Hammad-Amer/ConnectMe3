@@ -27,5 +27,6 @@ class TakePicture : AppCompatActivity() {
             val intent = Intent(this, NewPost_screen::class.java)
             startActivity(intent)
         }
+
     }
 }
