@@ -10,5 +10,4 @@ data class ModelChat(
     val receiverId: String = "",
     val vanish: Boolean = false,
     @get:Exclude var key: String? = null
-
 )

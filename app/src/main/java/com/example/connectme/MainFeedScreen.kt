@@ -320,6 +320,7 @@ class MainFeedScreen : AppCompatActivity() {
         val isConnected = activeNetwork != null && activeNetwork.isConnected
 
         if (!isConnected) {
+
             // No internet: Load cached posts
             val cachedPosts = dbHelper.getCachedFeedPosts()
             if (cachedPosts.isNotEmpty()) {
