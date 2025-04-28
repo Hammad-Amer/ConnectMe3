@@ -37,6 +37,7 @@ class NewPost : AppCompatActivity() {
             finish()
         }
 
+
         gridView.setOnItemClickListener { _, _, position, _ ->
             selectedImageUri = imageUris[position]
             mainImage.setImageURI(selectedImageUri)
