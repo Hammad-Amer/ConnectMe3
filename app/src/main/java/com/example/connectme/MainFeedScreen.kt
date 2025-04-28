@@ -332,6 +332,7 @@ class MainFeedScreen : AppCompatActivity() {
                 Toast.makeText(this, "No internet & no cached posts", Toast.LENGTH_SHORT).show()
             }
             return
+
         }
 
         // Online: Fetch from server

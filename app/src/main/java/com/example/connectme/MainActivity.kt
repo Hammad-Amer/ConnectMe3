@@ -31,6 +31,7 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
+
     private lateinit var sharedPref: SharedPreferences
     private val baseUrl = Globals.BASE_URL
     override fun onCreate(savedInstanceState: Bundle?) {
